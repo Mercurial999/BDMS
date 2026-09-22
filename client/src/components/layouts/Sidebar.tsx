@@ -55,8 +55,8 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <h2>BDMS</h2>
-        <span>Distribution operations</span>
+        <div className="sidebar-brand-mark"><span aria-hidden="true">F</span><h2>FALCORE</h2></div>
+        <span className="sidebar-subtitle">Consumer goods trading</span>
       </div>
 
       <nav className="sidebar-navigation">

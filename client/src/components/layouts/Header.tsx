@@ -6,8 +6,8 @@ function Header() {
   return (
     <header className="header">
       <div>
-        <p className="header-kicker">Bakery Distribution Management System</p>
-        <h1>Operations workspace</h1>
+        <p className="header-kicker">Falcore Consumer Goods Trading</p>
+        <h1>Distribution workspace</h1>
       </div>
 
       <div className="header-user">

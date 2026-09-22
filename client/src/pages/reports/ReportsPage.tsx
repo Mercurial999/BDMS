@@ -42,6 +42,54 @@ function formatDate(value: string) {
 
 const rowsPerPage = 10;
 
+type CsvValue = string | number | null;
+
+function csvCell(value: CsvValue) {
+  const text = value === null ? "" : String(value);
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function downloadCsv(report: ReportKey, data: ReportData, dates: ReportDateRange) {
+  const csvRows: CsvValue[][] = [];
+
+  if (report === "summary") {
+    const summary = data as SalesReportSummary;
+    csvRows.push(
+      ["Completed sales", "Quantity sold", "Total sales"],
+      [summary.completedSales, summary.totalQuantitySold, summary.totalSales],
+    );
+  } else if (report === "products") {
+    csvRows.push(["Product", "Unit", "Quantity sold", "Sales"]);
+    for (const row of data as ProductSalesReport[]) csvRows.push([row.product, row.unit, row.quantitySold, row.totalSales]);
+  } else if (report === "customers") {
+    csvRows.push(["Customer", "Completed deliveries", "Quantity sold", "Sales"]);
+    for (const row of data as CustomerSalesReport[]) csvRows.push([row.customer, row.completedDeliveries, row.quantitySold, row.totalSales]);
+  } else if (report === "inventory") {
+    csvRows.push(["Product", "Unit", "Current stock", "Minimum stock", "Status"]);
+    for (const row of data as InventoryReport[]) csvRows.push([row.product, row.unit, row.currentStock, row.minimumStock, row.currentStock === 0 ? "OUT_OF_STOCK" : row.currentStock <= row.minimumStock ? "LOW_STOCK" : "NORMAL"]);
+  } else if (report === "movements") {
+    csvRows.push(["Date", "Product", "Type", "Reason", "Quantity", "Reference", "Notes"]);
+    for (const row of data as StockMovementReport[]) csvRows.push([row.createdAt, row.product, row.type, row.reason, `${row.quantity} ${row.unit}`, row.reference, row.notes]);
+  } else {
+    csvRows.push(["Delivery", "Order", "Date", "Customer", "Status", "Items", "Total"]);
+    for (const row of data as (SalesDetailReport | DeliveryReport)[]) csvRows.push([row.deliveryId, row.orderId, row.deliveryDate, row.customer, row.status, row.items.map((item) => `${item.product} (${item.quantity} ${item.unit})`).join(", "), row.total]);
+  }
+
+  const csv = csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const range = dates.from || dates.to ? `-${dates.from ?? "start"}-to-${dates.to ?? "end"}` : "";
+  link.href = url;
+  link.download = `bdms-${report}${range}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function printReport() {
+  window.print();
+}
+
 function ReportTable({ headers, rows }: { headers: React.ReactNode; rows: React.ReactNode[] }) {
   const [page, setPage] = useState(1);
   const pageCount = Math.max(1, Math.ceil(rows.length / rowsPerPage));
@@ -97,8 +145,11 @@ function ReportsPage() {
   return (
     <section className="space-y-6">
       <PageHeader eyebrow="Analysis" title="Reports" description="Sales, inventory, stock movement, and delivery reports from the backend." />
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label="Report types">
+      <div className="flex flex-wrap items-center justify-between gap-3" role="tablist" aria-label="Report types">
+        <div className="flex flex-wrap gap-2">
         {reportTabs.map((tab) => <button className={`rounded-md border px-3 py-2 text-sm ${selectedReport === tab.key ? "border-amber-700 bg-amber-700 text-white" : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"}`} key={tab.key} onClick={() => setSelectedReport(tab.key)} role="tab" aria-selected={selectedReport === tab.key} type="button">{tab.label}</button>)}
+        </div>
+        {data && !loading && !error ? <div className="flex gap-2"><button className="rounded-md border border-amber-700 bg-white px-3 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-50" onClick={() => downloadCsv(selectedReport, data, appliedDates)} type="button">Export CSV</button><button className="rounded-md bg-amber-700 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-800" onClick={printReport} type="button">Export PDF</button></div> : null}
       </div>
       {activeTab?.dates ? <form className="surface flex flex-wrap items-end gap-3 p-4" onSubmit={applyFilter}><label className="grid gap-1 text-sm text-stone-600">From<input className="rounded-md border border-stone-300 px-3 py-2 text-stone-900" type="date" value={from} onChange={(event) => setFrom(event.target.value)} /></label><label className="grid gap-1 text-sm text-stone-600">To<input className="rounded-md border border-stone-300 px-3 py-2 text-stone-900" type="date" value={to} onChange={(event) => setTo(event.target.value)} /></label><button className="rounded-md bg-amber-700 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-800" type="submit">Apply filter</button></form> : null}
       {loading ? <p className="text-stone-500">Loading report...</p> : null}

@@ -56,12 +56,19 @@ function Login() {
 
   return (
     <div className="login-card">
-      <Card className="border-stone-200 bg-white/90 shadow-xl shadow-stone-900/5">
+      <div className="login-brand-lockup">
+        <span className="login-emblem" aria-hidden="true">F</span>
+        <div>
+          <p>FALCORE</p>
+          <span>Consumer Goods Trading</span>
+        </div>
+      </div>
+      <Card className="login-panel">
         <CardHeader>
-          <CardTitle className="text-2xl text-stone-800">Welcome back</CardTitle>
+          <CardTitle className="text-2xl text-stone-900">Welcome to Falcore</CardTitle>
 
           <CardDescription>
-            Sign in to continue to your operations workspace.
+            Sign in to continue to your distribution workspace.
           </CardDescription>
         </CardHeader>
 
@@ -75,7 +82,7 @@ function Login() {
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="you@falcore.com"
                 value={credentials.email}
                 onChange={(event) => updateField("email", event.target.value)}
                 autoComplete="email"
@@ -106,7 +113,7 @@ function Login() {
             )}
 
             <Button type="submit" className="w-full">
-              {isSubmitting ? "Signing in..." : "Login"}
+              {isSubmitting ? "Signing in..." : "Enter workspace"}
             </Button>
           </form>
         </CardContent>

@@ -4,15 +4,16 @@
 
 - Keep report tables as valid `thead`, `tbody`, and `tr` structures so column headers remain aligned above the data.
 - Keep pagination client-side for the current API responses, showing 10 rows per page with clear Previous and Next controls.
-- Add CSV export for the active report after confirming the desired column format with users.
+- Done: add CSV export for the complete active report dataset, including the applied date range in the filename.
 - Add sortable columns and server-side pagination if report datasets become large.
 - Add a compact mobile presentation for wide reports if horizontal scrolling becomes difficult on small screens.
+- Done: add PDF export through the browser print flow so users can save the active report as a PDF.
 
 ## Visual polish
 
 - Add small summary trend indicators only when the backend provides comparable periods.
 - Use consistent date, currency, quantity, and status formatting across Dashboard, Sales, and Reports.
-- Add a print-friendly report view for operational review and filing.
+- Done: add print styling that removes navigation and report controls from the PDF output.
 - Add browser-level smoke tests for report loading, filtering, pagination, empty data, and API errors.
 
 ## Integration boundaries

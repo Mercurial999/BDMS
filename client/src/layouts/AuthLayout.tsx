@@ -4,10 +4,16 @@ function AuthLayout() {
   return (
     <main className="auth-layout">
       <div className="auth-brand-panel">
-        <p className="auth-mark">BDMS</p>
-        <p className="auth-brand-title">Bakery distribution, made orderly.</p>
+        <div className="falcore-lockup">
+          <span className="falcore-emblem" aria-hidden="true">F</span>
+          <div>
+            <p className="auth-mark">FALCORE</p>
+            <p className="auth-submark">Consumer Goods Trading</p>
+          </div>
+        </div>
+        <p className="auth-brand-title">A sharper view of every movement.</p>
         <p className="auth-brand-copy">
-          Keep products, stock, customers, and deliveries moving from one clear workspace.
+          Bakery distribution operations, organized for confident decisions from stockroom to delivery.
         </p>
       </div>
       <div className="auth-form-panel">
