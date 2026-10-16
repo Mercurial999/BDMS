@@ -1,0 +1,29 @@
+
+# Environment variables and secrets
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Allow safe example templates
+!.env.example
+!**/.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript build files
+*.tsbuildinfo
+
+# Database backups
+backups/
+*.dump
+*.sql
