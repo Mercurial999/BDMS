@@ -18,7 +18,7 @@ function AnalyticsCharts({ dates }: { dates: ReportDateRange }) {
     setDetails(null);
     setProducts(null);
     setHasError(false);
-    Promise.all([getSalesDetails(dates), getProductSales(dates)])
+    Promise.all([getSalesDetails({ from: dates.from, to: dates.to }), getProductSales({ from: dates.from, to: dates.to })])
       .then(([salesDetails, productSales]) => {
         if (!active) return;
         setDetails(salesDetails);
