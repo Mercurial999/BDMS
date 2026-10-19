@@ -556,3 +556,8 @@ a {
 .stat-card:hover { transform: translateY(-2px); box-shadow: 0 20px 42px rgba(13,90,59,.12); }
 @media (max-width: 760px) { .sidebar { position: static; height: auto; } .header { position: static; } .header-user-meta { align-items: flex-start; } .dashboard-panel { padding: 17px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+.sidebar-caption { margin-top: 18px; color: #8a9b8e; font-size: 9px; font-weight: 800; letter-spacing: .16em; }
+.sidebar-section-label { padding: 8px 24px 0; color: #8a9b8e; font-size: 9px; font-weight: 800; letter-spacing: .16em; }
+.sidebar-footer-note { margin-bottom: 12px; color: #8a9b8e; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-align: center; }
+.sidebar-footer button { display: flex; align-items: center; justify-content: center; gap: 8px; }
