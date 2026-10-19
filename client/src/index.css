@@ -631,3 +631,98 @@ a {
     padding: 28px 20px 48px;
   }
 }
+
+/* UI refinement: clearer hierarchy, navigation icons, and responsive dashboard panels */
+.sidebar { flex: 0 0 248px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.sidebar-logo { padding: 26px 22px 22px; }
+.sidebar-brand-mark > span { box-shadow: 0 0 0 5px rgba(213,169,40,.12); }
+.sidebar-navigation { padding: 18px 12px; }
+.nav-link { display: flex; align-items: center; gap: 12px; min-height: 44px; border: 1px solid transparent; transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease; }
+.nav-link:hover { transform: translateX(2px); }
+.nav-link.active { border-color: #c9dfbd; box-shadow: inset 3px 0 0 var(--brand); }
+.nav-icon { width: 18px; height: 18px; flex: 0 0 18px; opacity: .82; }
+.header { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(14px); }
+.header-user { align-items: center; gap: 10px; }
+.header-avatar { display: grid; width: 38px; height: 38px; flex: 0 0 38px; place-items: center; border: 1px solid #c9dfbd; border-radius: 50%; color: var(--brand-dark); background: var(--brand-soft); font-size: 12px; font-weight: 900; }
+.header-user-meta { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; }
+.header-user-meta strong { font-size: 13px; }
+.header-user-meta span { font-size: 11px; }
+.dashboard-content { padding-top: 34px; }
+.dashboard-panels { align-items: stretch; }
+.dashboard-panel { min-width: 0; padding: 22px; }
+.dashboard-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.dashboard-panel-heading h3 { color: var(--brand-dark); font-size: 16px; font-weight: 800; }
+.panel-caption { color: var(--muted); font-size: 11px; }
+.dashboard-list { display: flex; flex-direction: column; gap: 0; }
+.dashboard-list-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1px solid #edf2ed; font-size: 13px; }
+.dashboard-list-row:last-child { border-bottom: 0; }
+.dashboard-list-name { overflow: hidden; color: #314f40; text-overflow: ellipsis; white-space: nowrap; }
+.dashboard-list-value { flex: 0 0 auto; padding: 5px 9px; border-radius: 8px; color: var(--brand-dark); background: #edf6e8; font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.dashboard-empty { padding: 24px 12px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: 13px; text-align: center; }
+.dashboard-error { padding: 14px 16px; border: 1px solid #fecaca; border-radius: 10px; color: #991b1b; background: #fef2f2; font-size: 13px; }
+.stat-card { transition: transform 180ms ease, box-shadow 180ms ease; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 20px 42px rgba(13,90,59,.12); }
+@media (max-width: 760px) { .sidebar { position: static; height: auto; } .header { position: static; } .header-user-meta { align-items: flex-start; } .dashboard-panel { padding: 17px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+.sidebar-caption { margin-top: 18px; color: #8a9b8e; font-size: 9px; font-weight: 800; letter-spacing: .16em; }
+.sidebar-section-label { padding: 8px 24px 0; color: #8a9b8e; font-size: 9px; font-weight: 800; letter-spacing: .16em; }
+.sidebar-footer-note { margin-bottom: 12px; color: #8a9b8e; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-align: center; }
+.sidebar-footer button { display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+
+@media (max-width: 420px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-user {
+    justify-content: flex-start;
+  }
+
+  .dashboard-content {
+    padding: 20px 14px;
+  }
+
+  .surface,
+  .stat-card {
+    border-radius: 10px;
+  }
+}
+
+/* =========================================
+   PRINT STYLES
+========================================= */
+
+@media print {
+  .sidebar,
+  .header,
+  .page-header,
+  [role="tablist"],
+  form,
+  button,
+  .status-badge + button {
+    display: none !important;
+  }
+
+  .dashboard-layout,
+  .dashboard-main,
+  .dashboard-content {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .surface,
+  .stat-card {
+    border: 1px solid #d6d3d1;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .overflow-x-auto {
+    overflow: visible;
+  }
+}
