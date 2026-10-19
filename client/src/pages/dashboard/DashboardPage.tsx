@@ -6,11 +6,11 @@ import StatCard from "../../components/common/StatCard";
 import { getDashboardSummary, type DashboardSummary } from "../../services/dashboardService";
 
 const productChartConfig = {
-  quantitySold: { label: "Quantity sold", color: "var(--color-chart-1)" },
+  quantitySold: { label: "Quantity sold", color: "#b45309" },
 } satisfies ChartConfig;
 
 const demandChartConfig = {
-  quantityDemanded: { label: "Quantity demanded", color: "var(--color-chart-2)" },
+  quantityDemanded: { label: "Quantity demanded", color: "#0f766e" },
 } satisfies ChartConfig;
 
 function DashboardPage() {
