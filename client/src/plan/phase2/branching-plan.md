@@ -3,6 +3,8 @@
 ## Goal
 Keep `main` as the stable Phase 1 baseline. Build and test Phase 2 separately.
 
+Track step and feature status in [progress-tracker.md](./progress-tracker.md). A feature is complete only after acceptance criteria and relevant tests pass; record evidence before changing its status.
+
 ## Branch Workflow
 1. **`main`** — stable Phase 1; do not develop Phase 2 directly here.
 2. **`phase-2-development`** — integration branch for approved Phase 2 work.
