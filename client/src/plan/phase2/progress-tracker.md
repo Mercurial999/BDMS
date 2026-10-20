@@ -62,6 +62,18 @@ When a step is completed, update this file and the relevant feature plan in the 
 
 **Do not start schema-changing work until the database safety and baseline checks are understood.** If backup/restore or Phase 1 regression cannot be verified, mark the relevant item BLOCKED and resolve it first.
 
+## Initial read-only source inspection (not runtime verification)
+
+The following observations are from reading the repository source on `phase-2-development`. They are **not** proof that the local environment, database, or live API has passed testing.
+
+- [x] Confirmed Product creation does not create an Inventory row automatically.
+- [x] Confirmed the backend has an explicit inventory-create endpoint and the Inventory UI has a zero-quantity setup action for active products without inventory.
+- [x] Confirmed the Inventory UI sends stock-in through the stock-movement API using `IN / PURCHASE`.
+- [!] **Stock integrity risk:** `PUT /api/inventory/:id` accepts a `quantity` field and updates it directly without creating a stock movement. Do not use that endpoint to change physical stock.
+- [!] **Stock integrity risk:** the current generic stock-movement service handles `ADJUSTMENT` by setting inventory quantity equal to the movement quantity, rather than applying a documented delta. Do not implement Phase 2 adjustments by blindly reusing this behavior.
+- [!] **Validation gap to verify:** the current inventory and stock-movement schemas validate non-negative/positive numbers but do not enforce integer quantities consistently. The business rule remains whole-number quantities; test and address this deliberately in the appropriate approved feature rather than making an unrelated schema change now.
+- [ ] Run local builds, migration checks, backup/restore checks, and safe Phase 1 regression tests before marking Step 0 complete.
+
 ## Per-feature completion checklist
 
 Copy this checklist into the relevant feature section or feature plan:
