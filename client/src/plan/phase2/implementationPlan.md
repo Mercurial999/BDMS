@@ -1,10 +1,12 @@
 # BDMS Phase 2 Implementation Plan
 
-**Status:** Planning only — no application code or database changes authorized  
+**Status:** Phase 2 started — Step 0 baseline and safety checkpoint in progress  
 **Review date:** 2026-10-20  
-**Repository:** `Mercurial999/Web-System`, default branch `main`  
-**Scope:** Phase 2 operations upgrade while protecting the existing Phase 1 workflows  
-**Review boundary:** This re-analysis reads Markdown planning documents only. It does not re-verify the current source code, database, API responses, or deployed runtime. Treat implementation details described in older documents as requirements to validate against the actual code before coding.
+**Repository:** `Mercurial999/Web-System`  
+**Development branch:** `phase-2-development` (keep `main` as the stable Phase 1 baseline)  
+**Progress tracker:** [Phase 2 Progress Tracker](./progress-tracker.md) — update it only when work and verification evidence justify a status change.  
+**Scope:** Phase 2 operations upgrade while protecting the existing Phase 1 workflows. Proceed one lesson/feature at a time. Inspect the current implementation before coding; make only the changes required for the active step.  
+**Review boundary:** This plan began as a Markdown-only review. Source code, API behavior, database state, and runtime must still be verified read-only before implementation. No feature should be marked complete until its acceptance criteria and relevant tests have passed.
 
 ## 1. Executive recommendation
 
