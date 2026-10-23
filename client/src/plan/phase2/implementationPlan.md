@@ -26,7 +26,8 @@ Recommended sequence:
 7. Audit logs, introduced alongside critical operations rather than postponed until they become impossible to reconstruct.
 8. Phase 2 reports and reconciliation.
 9. Delivery status changes only if the real business workflow requires them.
-10. Permission hardening as a cross-cutting, explicitly tested task. Review authorization before exposing each new write endpoint.
+10. Delivery Receipt (DR) generation and printing, generated from the actual delivery record and using linked order/customer details where available.
+11. Permission hardening as a cross-cutting, explicitly tested task. Review authorization before exposing each new write endpoint.
 
 **Key recommendation:** Purchase receiving should be the first new stock-affecting Phase 2 feature, but only after the existing stock-in behavior and inventory records are understood. The current inventory plan and the Phase 2 roadmap describe related but not identical tasks: the first asks to consume existing backend functionality without changing it; the second proposes a supplier-linked receiving workflow that may require new backend models and APIs. Keep these tasks separate.
 
@@ -94,7 +95,8 @@ Preserve these rules:
 - The frontend triggers the completion endpoint; it does not separately deduct stock, create a sale, or create a stock movement.
 - Sales are derived from completed deliveries. Do not introduce a separate Sale model or duplicate sales-entry process.
 - Bakery stores are Customer records, not login accounts in this phase.
-- Receipts, customer portal, online ordering, multiple warehouses, and large-scale analytics remain deferred unless separately approved.
+- Customer login accounts, customer portal, online ordering, multiple warehouses, and large-scale analytics remain deferred unless separately approved.
+- Delivery Receipt (DR) generation/printing is now in Phase 2 scope. A DR documents the goods actually delivered; it is not automatically a BIR-compliant sales invoice or official receipt.
 
 ## 4. Main risk findings and recommendations
 
@@ -358,7 +360,47 @@ Do not conflate a customer return with a delivery status unless there is a clear
 
 **Acceptance criteria:** Invalid transitions are rejected, status-only changes do not change stock, and stock-affecting transitions are transactional and idempotent.
 
-## Step 9 — Permission hardening
+## Step 9 — Delivery Receipt (DR) generation and printing
+
+**Business outcome:** Staff can produce a printable Delivery Receipt from a delivery record without re-entering customer and order details.
+
+**Relationship to existing workflows:**
+- Keep Orders and Deliveries as separate records: an Order records what the customer requested; a Delivery records what was actually sent.
+- Generate the DR from the Delivery record. When the delivery originated from an Order, use the linked order and customer data to prefill relevant details.
+- The DR item lines must show the actual quantities on that Delivery, not blindly copy the originally ordered quantities. Staff must be able to verify delivered quantities before completing the delivery under the existing workflow.
+- Preserve the current inventory rule: stock is deducted only by the existing delivery-completion operation. Printing or previewing a DR must not change inventory, create a second stock movement, or mark a delivery complete.
+- Do not require customer login accounts; the existing Customer record is sufficient for customer details.
+
+**Proposed DR contents (confirm with the business before implementation):**
+- Unique DR number and delivery date.
+- Business name and contact details.
+- Customer name and delivery address/contact details available in the Customer record.
+- Related order number/reference, when applicable.
+- Product descriptions, units, and actual delivered quantities.
+- Prepared by / delivered by fields if required by the business.
+- Customer acknowledgment and signature area.
+- Any agreed notes or terms.
+
+**Design and safety decisions required before coding:**
+- Confirm the required paper size/layout (including whether long-bond paper is mandatory), margins, copies, and printer expectations.
+- Confirm the DR number format and whether numbers are allocated when a draft is created or when a delivery is completed. Numbers must not collide.
+- Confirm which customer/business fields must be printed and which are optional.
+- Decide whether the printed DR is a live view or a saved document snapshot. If delivery/customer details can later change, define how historical reprints remain accurate.
+- Define whether a DR can be previewed/printed for a DRAFT delivery and what is allowed after cancellation/completion.
+- Confirm whether staff may correct delivery items before completion and how a corrected/reprinted DR is identified.
+- Keep the DR distinct from a sales invoice or official receipt. Do not label it BIR-compliant or use it as a substitute for a legally required tax document without the business's accountant confirming the applicable requirements.
+
+**Implementation guidance:**
+1. Inspect current Order–Delivery relations, customer fields, delivery item fields, and status transitions read-only.
+2. Agree on the DR template and numbering rules before choosing a PDF/print implementation.
+3. Reuse the existing delivery/customer/order data; avoid duplicate customer or order entry.
+4. Add backend fields/tables only if the agreed numbering, snapshot, or audit requirements need them. Review any migration as additive and test it against a separate database.
+5. Ensure the document uses actual delivery quantities and does not mutate business data merely by rendering or printing.
+6. Test Order-linked and non-order deliveries if the current system permits both, long names/addresses, multiple items, page breaks, reprints, and unauthorized access.
+
+**Acceptance criteria:** Staff can preview and print a DR with correct customer/order context and actual delivery item quantities; the DR has a non-colliding reference and agreed paper layout; preview/printing does not change stock or statuses; completed delivery and stock-movement behavior remains unchanged; the document is not misrepresented as a BIR invoice/official receipt.
+
+## Step 10 — Permission hardening
 
 Use the existing role/permission foundation rather than inventing a second authorization system.
 
@@ -503,6 +545,7 @@ Do not put the whole Phase 2 roadmap in one large commit. Run relevant builds an
 10. **Audit access/retention:** Who may view audit history and how long must it be retained?
 11. **Role matrix:** Which current roles may receive stock, adjust stock, accept returns, and manage suppliers?
 12. **Frontend-only constraint:** For the existing Add Quantity task, confirm that backend changes remain out of scope unless inspection proves no safe existing API can support it.
+13. **Delivery Receipt:** Confirm paper size/layout, required printed fields, DR numbering and allocation timing, draft/completed/cancelled printing rules, reprint/history behavior, and whether a saved snapshot is required. Keep the DR separate from BIR sales invoices/official receipts unless accounting requirements are independently confirmed.
 
 Do not guess these business decisions in code. Record the decision before implementing the related feature.
 
@@ -532,6 +575,7 @@ Phase 2 is complete when:
 - Existing Phase 1 order-to-delivery and sales/report behavior still passes regression tests.
 - Database migrations are reviewed and applied without data loss.
 - Frontend workflows consume the backend source of truth and do not duplicate business logic.
+- Delivery Receipts can be generated/printed from delivery records with correct actual quantities and agreed customer/order details, without changing stock when printed.
 - Builds, tests, and release notes are complete.
 
 **Final recommendation:** Start with Step 0. Next resolve the documented Product → Inventory → Stock-In frontend flow using existing backend functionality if possible. Then build Suppliers and Purchase Receiving as separate, reviewable features. Do not start returns, delivery-status expansion, or a broad permission refactor until the core stock-in path is proven safe and the relevant business decisions are confirmed.

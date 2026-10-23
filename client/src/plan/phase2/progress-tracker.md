@@ -27,8 +27,9 @@ When a step is completed, update this file and the relevant feature plan in the 
 | 6 | Audit Logs | NOT STARTED | Critical actions are traceable without logging secrets; access and integrity are tested |
 | 7 | Phase 2 Reports and reconciliation | NOT STARTED | New reports reconcile to source transactions and existing Phase 1 reports remain compatible |
 | 8 | Delivery status changes (conditional) | NOT STARTED — DECISION REQUIRED | Only undertaken if the business confirms the current statuses are insufficient |
-| 9 | Permission hardening (cross-cutting) | NOT STARTED | Every new write endpoint and sensitive report has backend authorization and 401/403/success tests |
-| 10 | Final Phase 2 regression and release review | NOT STARTED | Builds, tests, migration review, backup/restore check, Docker smoke tests, and release notes recorded |
+| 9 | Delivery Receipt (DR) generation and printing | NOT STARTED | DR uses delivery's actual quantities and linked order/customer details; agreed layout/numbering verified; printing does not mutate stock or status |
+| 10 | Permission hardening (cross-cutting) | NOT STARTED | Every new write endpoint and sensitive report has backend authorization and 401/403/success tests |
+| 11 | Final Phase 2 regression and release review | NOT STARTED | Builds, tests, migration review, backup/restore check, Docker smoke tests, and release notes recorded |
 
 ## Step 0 — Phase 1 baseline and safety checkpoint
 
@@ -90,6 +91,38 @@ Copy this checklist into the relevant feature section or feature plan:
 - [ ] Feature branch merged into `phase-2-development` only after review/tests.
 - [ ] This tracker updated with date, commit/PR and test evidence.
 
+## Step 9 — Delivery Receipt (DR) generation and printing
+
+**Status: NOT STARTED — requirements/design decisions needed**
+
+This feature is newly added to Phase 2 scope. No code, schema, or runtime work has been performed for it yet.
+
+### Intended workflow
+- [ ] Keep the Order as the record of what the customer requested.
+- [ ] Generate the DR from the Delivery record, using linked Order and Customer details where available.
+- [ ] Display actual delivered quantities from the Delivery items, not the original requested quantities by default.
+- [ ] Confirm delivered items/quantities using the existing delivery workflow; preserve the current completion endpoint as the only inventory-deduction point.
+- [ ] Ensure previewing/printing a DR does not deduct inventory, create stock movements, or change delivery/order status.
+- [ ] Do not introduce customer login accounts as a dependency.
+
+### Requirements to confirm before implementation
+- [ ] Paper size and print layout (including whether long-bond paper is required), margins, and number of copies.
+- [ ] Required business and customer details, including delivery address/contact fields.
+- [ ] DR number format, uniqueness, and when a number is allocated.
+- [ ] Whether draft deliveries can be previewed/printed and what happens after completion/cancellation.
+- [ ] Whether the DR is rendered from live data or stored as a snapshot so historical reprints remain accurate.
+- [ ] How corrections and reprints are identified and audited.
+- [ ] Confirm with the business/accountant that the DR is a delivery document and not a substitute for a BIR-compliant sales invoice or official receipt.
+
+### Verification required
+- [ ] Order-linked delivery shows the correct customer and order reference.
+- [ ] DR line items match actual delivery quantities.
+- [ ] Long customer/product names and multiple items print cleanly across pages.
+- [ ] Reprints use the agreed numbering/history behavior.
+- [ ] Unauthorized users cannot access protected delivery documents.
+- [ ] Printing/preview does not change inventory, stock movements, or statuses.
+- [ ] Relevant builds and Phase 1 order-to-delivery regression checks pass.
+
 ## Decision log
 
 Record decisions here before implementing behavior that depends on them.
@@ -104,9 +137,11 @@ Record decisions here before implementing behavior that depends on them.
 | 2026-10-20 | Reports | How should returns be represented alongside sales? | Define gross/returns/net reporting before implementation | OPEN |
 | 2026-10-20 | Delivery statuses | Are current DRAFT/COMPLETED/CANCELLED statuses insufficient? | Conditional; do not add statuses without business need | OPEN |
 | 2026-10-20 | Permissions | Which roles may receive, adjust, accept returns and read audit logs? | Inspect current roles/permissions and confirm matrix | OPEN |
+| 2026-10-23 | Delivery Receipt | What paper layout, required fields, numbering timing, and historical reprint behavior are required? | Add DR generation/printing to Phase 2; confirm detailed rules with the business before implementation. DR must reflect actual delivered quantities and must not alter stock when printed. | OPEN |
 
 ## Change history
 
 | Date | Update |
 |---|---|
 | 2026-10-20 | Initial tracker created. Step 0 is in progress; no implementation task is marked complete. |
+| 2026-10-23 | Added Delivery Receipt generation/printing as Phase 2 Step 9; implementation remains not started pending layout, numbering, and document-history decisions. |
