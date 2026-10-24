@@ -57,23 +57,31 @@ export class InventoryService {
     quantity: number;
     minimumStock: number;
   }) {
-    // Business rule 1:
-    // Quantity cannot be negative.
+    // Inventory quantities must be whole numbers.
+    if (!Number.isInteger(data.quantity)) {
+      throw new ValidationError(
+        "Quantity must be a whole number."
+      );
+    }
+
     if (data.quantity < 0) {
       throw new ValidationError(
         "Quantity cannot be negative."
       );
     }
 
-    // Business rule 2:
-    // Minimum stock cannot be negative.
+    if (!Number.isInteger(data.minimumStock)) {
+      throw new ValidationError(
+        "Minimum stock must be a whole number."
+      );
+    }
+
     if (data.minimumStock < 0) {
       throw new ValidationError(
         "Minimum stock cannot be negative."
       );
     }
 
-    // Business rule 3:
     // Product must exist.
     const product =
       await productRepository.findById(
@@ -86,7 +94,6 @@ export class InventoryService {
       );
     }
 
-    // Business rule 4:
     // Product must be active.
     if (product.status !== "ACTIVE") {
       throw new ConflictError(
@@ -94,7 +101,6 @@ export class InventoryService {
       );
     }
 
-    // Business rule 5:
     // Product can have only one inventory record.
     const existingInventory =
       await inventoryRepository.findByProductId(
@@ -113,7 +119,6 @@ export class InventoryService {
   async updateInventory(
     id: number,
     data: {
-      quantity?: number;
       minimumStock?: number;
     }
   ) {
@@ -133,11 +138,11 @@ export class InventoryService {
     }
 
     if (
-      data.quantity !== undefined &&
-      data.quantity < 0
+      data.minimumStock !== undefined &&
+      !Number.isInteger(data.minimumStock)
     ) {
       throw new ValidationError(
-        "Quantity cannot be negative."
+        "Minimum stock must be a whole number."
       );
     }
 
