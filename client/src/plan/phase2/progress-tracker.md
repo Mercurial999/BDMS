@@ -1,8 +1,8 @@
 # BDMS Phase 2 Progress Tracker
 
 **Current branch:** `phase-2-development`  
-**Overall status:** IN PROGRESS — Step 0 baseline preparation  
-**Last updated:** 2026-10-20  
+**Overall status:** IN PROGRESS — Step 0 safety checkpoint; Step 1 workflow verification complete  
+**Last updated:** 2026-10-24  
 **Rule:** Mark a task COMPLETE only after its acceptance criteria and relevant tests have passed. A code change or successful build alone does not complete a feature.
 
 ## Status key
@@ -19,7 +19,7 @@ When a step is completed, update this file and the relevant feature plan in the 
 | Step | Work item | Status | Completion condition |
 |---|---|---|---|
 | 0 | Phase 1 baseline and safety checkpoint | IN PROGRESS | Working tree/branch verified, backup and restore path checked, builds and core regression results recorded |
-| 1 | Product → Inventory → existing Stock-In workflow review | NOT STARTED | Actual API and UI behavior verified; safe existing stock-in path documented; frontend-only unless a backend gap is separately approved |
+| 1 | Product → Inventory → existing Stock-In workflow review | COMPLETE | Actual API and UI behavior verified; safe existing stock-in path documented; frontend-only unless a backend gap is separately approved |
 | 2 | Suppliers master data | NOT STARTED | Supplier CRUD/deactivation, validation, authorization, UI and tests verified |
 | 3 | Purchase Receiving / Stock-In | NOT STARTED | Receipt posts stock exactly once with matching stock movements in one transaction |
 | 4 | Stock Adjustments | NOT STARTED | Adjustment rules approved; stock and ledger remain consistent; authorization and tests pass |
@@ -91,6 +91,34 @@ Copy this checklist into the relevant feature section or feature plan:
 - [ ] Feature branch merged into `phase-2-development` only after review/tests.
 - [ ] This tracker updated with date, commit/PR and test evidence.
 
+## Step 1 — Product → Inventory → existing Stock-In workflow review
+
+**Status: COMPLETE for the documented manual workflow check; this does not complete Step 0 baseline/regression safety checks.**
+
+### Verified workflow
+- [x] Manually created a test product named `Phase 2 Test Flour`.
+- [x] Confirmed the product appeared in the inventory setup list.
+- [x] Initialized its inventory record at quantity `0`.
+- [x] Used the existing stock-in workflow to add `5` units with reference `PHASE2-TEST`.
+- [x] Confirmed inventory quantity became `5`.
+- [x] Confirmed a corresponding `IN / PURCHASE` stock movement was recorded.
+- [x] Frontend production build passed with `npm run build`.
+
+### Limitations and follow-up
+- This was a focused manual UI check, not a full Phase 1 regression test.
+- Database backup/restore, complete authorization/error-path tests, and end-to-end regression remain unverified.
+- The direct inventory quantity-update path and current `ADJUSTMENT` semantics remain known stock-integrity risks; do not rely on them for Phase 2 stock adjustments without a reviewed fix and tests.
+- Keep product creation, inventory initialization, and stock-in as separate operations. Use the existing stock-movement workflow to record stock-in.
+
+### Evidence
+| Evidence | Result |
+|---|---|
+| Manual UI workflow | Developer-confirmed on 2026-10-22 |
+| Frontend build | Passed `npm run build` |
+| Commit/test log | Not recorded |
+| Full Phase 1 regression | Not run |
+| Backup/restore verification | Not checked |
+
 ## Step 9 — Delivery Receipt (DR) generation and printing
 
 **Status: NOT STARTED — requirements/design decisions needed**
@@ -145,3 +173,4 @@ Record decisions here before implementing behavior that depends on them.
 |---|---|
 | 2026-10-20 | Initial tracker created. Step 0 is in progress; no implementation task is marked complete. |
 | 2026-10-23 | Added Delivery Receipt generation/printing as Phase 2 Step 9; implementation remains not started pending layout, numbering, and document-history decisions. |
+| 2026-10-24 | Recorded the focused manual Product → Inventory → Stock-In verification and frontend build result as Step 1 COMPLETE; Step 0 safety checks remain in progress. |
