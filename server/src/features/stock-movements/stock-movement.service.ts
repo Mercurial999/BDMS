@@ -28,6 +28,12 @@ export class StockMovementService {
     reference?: string;
     notes?: string;
   }) {
+    if (!Number.isInteger(data.quantity)) {
+      throw new ValidationError(
+        "Movement quantity must be a whole number."
+      );
+    }
+
     if (data.quantity <= 0) {
       throw new ValidationError(
         "Movement quantity must be greater than zero."
@@ -83,6 +89,7 @@ export class StockMovementService {
             );
           }
         } else {
+          // ADJUSTMENT quantity represents the new physical stock count.
           newQuantity = data.quantity;
         }
 
