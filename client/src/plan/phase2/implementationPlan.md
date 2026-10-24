@@ -1,7 +1,7 @@
 # BDMS Phase 2 Implementation Plan
 
 **Status:** Phase 2 started — Step 0 baseline and safety checkpoint in progress  
-**Review date:** 2026-10-20  
+**Review date:** 2026-10-24  
 **Repository:** `Mercurial999/Web-System`  
 **Development branch:** `phase-2-development` (keep `main` as the stable Phase 1 baseline)  
 **Progress tracker:** [Phase 2 Progress Tracker](./progress-tracker.md) — update it only when work and verification evidence justify a status change.  
@@ -45,7 +45,7 @@ The plan was compared against these Markdown documents currently visible on GitH
 
 The `phase2` folder currently contains this implementation plan. No additional Phase 2 Markdown requirement file was listed in that folder during this review.
 
-**Important limitation:** The source code was intentionally not read in this re-analysis because the request was to read Markdown files only. Before implementation, inspect the actual routes, validation, services, permissions, Prisma schema, migrations, and frontend API contracts read-only. Do not treat this plan as proof that current code still matches the documentation.
+**Important limitation:** The source code has since been inspected read-only for key request paths, authentication, Orders, Product/Inventory routes, and the Prisma schema. The focused findings and remaining risks are recorded in `progress-tracker.md` and `ARCHITECTURE.md`. This is not a substitute for inspecting the exact files for each feature before editing, and it does not prove runtime behavior.
 
 ## 3. Combined business model and non-negotiable invariants
 
@@ -195,6 +195,18 @@ Checklist:
 **Preferred behavior:** A newly created active Product has a clear path to an Inventory record with zero quantity; actual stock arrives through a stock-in operation. Whether inventory is auto-initialized or explicitly created must follow verified existing backend behavior.
 
 **Acceptance criteria:** Staff can understand the difference between Product and Inventory; a product without an inventory record has a clear state; stock-in changes quantity through the server and records the corresponding movement; no backend changes are made as part of this frontend-only step.
+
+### Step 1 verification record (2026-10-22)
+
+A focused manual workflow check was completed:
+- Created test product `Phase 2 Test Flour`.
+- Confirmed it appeared in the inventory setup list.
+- Initialized its Inventory record at quantity `0`.
+- Added `5` units through the existing stock-in workflow with reference `PHASE2-TEST`.
+- Confirmed the resulting inventory quantity was `5` and a matching `IN / PURCHASE` stock movement existed.
+- Frontend production build passed with `npm run build`.
+
+**Limitations:** This was not a full Phase 1 regression. Backup/restore, complete authorization/error-path tests, and the full order-to-delivery workflow remain unverified. The direct inventory quantity-update path and `ADJUSTMENT` semantics remain known stock-integrity risks. Step 1's focused workflow check is complete; Step 0 safety checks remain in progress. See the progress tracker for the recorded evidence.
 
 ## Step 2 — Suppliers (master data only)
 
