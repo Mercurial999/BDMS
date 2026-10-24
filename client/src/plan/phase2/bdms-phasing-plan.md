@@ -263,17 +263,19 @@ Identify the specific reports and document requirements with the business and it
 ## 6. Recommended priority summary
 
 1. Safety checkpoint and regression baseline.
-2. Inventory adjustment controls and stock-integrity review.
-3. Supplier records.
-4. Purchase receiving / stock-in.
-5. Order and delivery lifecycle review.
-6. Customer returns.
-7. Delivery receipt generation/printing.
-8. Audit logs.
-9. Improved reports and dashboard.
-10. Permission hardening and final regression/release readiness.
+2. Verify the existing Product → Inventory → Stock-In workflow.
+3. Investigate the known stock-integrity risks and define a safe stock-mutation path before adding any new stock-changing workflow. This is a prerequisite review, not completion of the full adjustment feature.
+4. Supplier records.
+5. Purchase receiving / stock-in.
+6. Inventory controls and stock adjustments.
+7. Order and delivery lifecycle review.
+8. Customer returns.
+9. Delivery receipt generation/printing.
+10. Audit logs.
+11. Improved reports and dashboard.
+12. Permission hardening and final regression/release readiness.
 
-This order prioritizes inventory integrity and traceability. It may change if the business identifies an urgent operational need, but database or inventory-affecting changes should not skip requirement definition and tests.
+This order separates the prerequisite stock-integrity investigation from the full inventory-adjustment feature. Supplier records can be developed independently, but purchase receiving must not be implemented until stock-changing paths and their transaction/ledger behavior are understood and made safe. Any priority change still requires confirmed business rules, explicit scope, and tests.
 
 ---
 

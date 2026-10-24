@@ -19,17 +19,18 @@ Recommended sequence:
 
 1. Phase 1 baseline and regression checklist.
 2. Inventory/Product workflow review: make sure every active product has a clear, safe path to an inventory record and stock-in. Prefer existing API behavior; do not add quantity to Product creation.
-3. Supplier master data.
-4. Purchase receiving / stock-in as the first new backend workflow.
-5. Stock adjustments.
-6. Customer returns.
-7. Audit logs, introduced alongside critical operations rather than postponed until they become impossible to reconstruct.
-8. Phase 2 reports and reconciliation.
-9. Delivery status changes only if the real business workflow requires them.
-10. Delivery Receipt (DR) generation and printing, generated from the actual delivery record and using linked order/customer details where available.
-11. Permission hardening as a cross-cutting, explicitly tested task. Review authorization before exposing each new write endpoint.
+3. Stock-integrity investigation: inspect and resolve the known direct inventory-update and ambiguous adjustment paths, and define the approved server-side stock-mutation approach before implementing any new stock-changing workflow. This prerequisite review is not the same as delivering the full adjustment feature.
+4. Supplier master data.
+5. Purchase receiving / stock-in as the first new backend workflow, after the stock-mutation risks above are understood and made safe.
+6. Stock adjustments as a dedicated, separately tested feature.
+7. Customer returns.
+8. Audit logs, introduced alongside critical operations rather than postponed until they become impossible to reconstruct.
+9. Phase 2 reports and reconciliation.
+10. Delivery status changes only if the real business workflow requires them.
+11. Delivery Receipt (DR) generation and printing, generated from the actual delivery record and using linked order/customer details where available.
+12. Permission hardening as a cross-cutting, explicitly tested task. Review authorization before exposing each new write endpoint.
 
-**Key recommendation:** Purchase receiving should be the first new stock-affecting Phase 2 feature, but only after the existing stock-in behavior and inventory records are understood. The current inventory plan and the Phase 2 roadmap describe related but not identical tasks: the first asks to consume existing backend functionality without changing it; the second proposes a supplier-linked receiving workflow that may require new backend models and APIs. Keep these tasks separate.
+**Key recommendation:** First complete the safety baseline and verify the existing Product → Inventory → Stock-In workflow. Then investigate and make the stock-mutation paths safe before implementing purchase receiving or any other new stock-changing workflow. Supplier master data can be built independently of receiving. Purchase receiving should be the first new stock-affecting business workflow once those risks are addressed; the full stock-adjustment feature follows as a separate, reviewed feature. The existing inventory UI task and the supplier-linked receiving workflow are related but distinct: the first should consume existing backend functionality without changing it, while the second may require new backend models and APIs. Keep them separate.
 
 ## 2. Markdown documents reviewed
 
