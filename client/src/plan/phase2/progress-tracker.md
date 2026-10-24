@@ -21,16 +21,15 @@ When a step is completed, update this file and the relevant feature plan in the 
 | 0 | Phase 1 baseline and safety checkpoint | IN PROGRESS | Working tree/branch verified, backup and restore path checked, builds and core regression results recorded |
 | 1 | Product → Inventory → existing Stock-In workflow review | COMPLETE | Actual API and UI behavior verified; safe existing stock-in path documented; frontend-only unless a backend gap is separately approved |
 | 2 | Suppliers master data | NOT STARTED | Supplier CRUD/deactivation, validation, authorization, UI and tests verified |
-| 3 | Purchase Receiving / Stock-In | NOT STARTED | Receipt posts stock exactly once with matching stock movements in one transaction |
-| 4 | Stock Adjustments | NOT STARTED | Adjustment rules approved; stock and ledger remain consistent; authorization and tests pass |
-| 5 | Customer Returns | NOT STARTED | Returns link to completed deliveries; quantities are bounded; only approved resellable items are restocked |
-| 6 | Audit Logs | NOT STARTED | Critical actions are traceable without logging secrets; access and integrity are tested |
-| 7 | Phase 2 Reports and reconciliation | NOT STARTED | New reports reconcile to source transactions and existing Phase 1 reports remain compatible |
-| 8 | Delivery status changes (conditional) | NOT STARTED — DECISION REQUIRED | Only undertaken if the business confirms the current statuses are insufficient |
-| 9 | Delivery Receipt (DR) generation and printing | NOT STARTED | DR uses delivery's actual quantities and linked order/customer details; agreed layout/numbering verified; printing does not mutate stock or status |
+| 3 | Purchase receiving / Stock-In | NOT STARTED | Receiving posts stock exactly once, with matching stock movements in one transaction |
+| 4 | Inventory controls and stock adjustments | NOT STARTED | Adjustment rules approved; stock and ledger remain consistent; authorization and tests pass |
+| 5 | Delivery and order workflow review | NOT STARTED | Existing workflows inspected; any delivery-status change requires a documented business decision before implementation |
+| 6 | Customer returns | NOT STARTED | Returns link to completed deliveries; quantities are bounded; only approved resellable items are restocked |
+| 7 | Delivery Receipt (DR) generation and printing | NOT STARTED | DR uses actual delivery quantities and linked order/customer details; layout and numbering agreed; printing does not mutate stock or status |
+| 8 | Audit logs | NOT STARTED | Critical actions are traceable without logging secrets; access and integrity are tested |
+| 9 | Reports and operational dashboard | NOT STARTED — INSPECT EXISTING FEATURES FIRST | Existing reports and dashboard are assessed before changes; only confirmed gaps are improved; results reconcile to source transactions |
 | 10 | Permission hardening (cross-cutting) | NOT STARTED | Every new write endpoint and sensitive report has backend authorization and 401/403/success tests |
-| 11 | Final Phase 2 regression and release review | NOT STARTED | Builds, tests, migration review, backup/restore check, Docker smoke tests, and release notes recorded |
-
+| 11 | Regression and release readiness | NOT STARTED | Builds, tests, migration review, backup/restore check, Docker smoke tests, and release notes recorded |
 ## Step 0 — Phase 1 baseline and safety checkpoint
 
 **Status: IN PROGRESS**
@@ -119,7 +118,7 @@ Copy this checklist into the relevant feature section or feature plan:
 | Full Phase 1 regression | Not run |
 | Backup/restore verification | Not checked |
 
-## Step 9 — Delivery Receipt (DR) generation and printing
+## Step 7 — Delivery Receipt (DR) generation and printing
 
 **Status: NOT STARTED — requirements/design decisions needed**
 

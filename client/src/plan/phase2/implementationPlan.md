@@ -2,7 +2,7 @@
 
 **Status:** Phase 2 started — Step 0 baseline and safety checkpoint in progress  
 **Review date:** 2026-10-24  
-**Repository:** `Mercurial999/Web-System`  
+**Repository:** `Mercurial999/BDMS`
 **Development branch:** `phase-2-development` (keep `main` as the stable Phase 1 baseline)  
 **Progress tracker:** [Phase 2 Progress Tracker](./progress-tracker.md) — update it only when work and verification evidence justify a status change.  
 **Scope:** Phase 2 operations upgrade while protecting the existing Phase 1 workflows. Proceed one lesson/feature at a time. Inspect the current implementation before coding; make only the changes required for the active step.  

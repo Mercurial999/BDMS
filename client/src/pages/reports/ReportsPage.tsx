@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
+import AnalyticsCharts from "./AnalyticsCharts";
 import StatusBadge from "../../components/common/StatusBadge";
 import {
   getCustomerSales,
@@ -145,6 +146,7 @@ function ReportsPage() {
   return (
     <section className="space-y-6">
       <PageHeader eyebrow="Analysis" title="Reports" description="Sales, inventory, stock movement, and delivery reports from the backend." />
+      <AnalyticsCharts dates={appliedDates} />
       <div className="flex flex-wrap items-center justify-between gap-3" role="tablist" aria-label="Report types">
         <div className="flex flex-wrap gap-2">
         {reportTabs.map((tab) => <button className={`rounded-md border px-3 py-2 text-sm ${selectedReport === tab.key ? "border-amber-700 bg-amber-700 text-white" : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"}`} key={tab.key} onClick={() => setSelectedReport(tab.key)} role="tab" aria-selected={selectedReport === tab.key} type="button">{tab.label}</button>)}

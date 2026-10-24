@@ -88,22 +88,7 @@ Confirm that an active product can be created, inventory can be initialized acco
 
 **Status:** A manual smoke test was recorded in the Phase 2 tracker. It is useful evidence, but it is not a substitute for the full safety checkpoint.
 
-### Step 2 — Inventory controls and stock adjustments
-
-Make inventory corrections traceable before building more workflows on top of stock balances.
-
-Recommended requirements:
-- Only authorized staff can create adjustments.
-- Every adjustment records product, quantity change, reason, timestamp, and actor where supported by the schema.
-- Positive and negative adjustments are validated; stock must not become negative unless a future, explicit business rule permits it.
-- The inventory balance and stock movement are updated atomically.
-- Historical adjustments are not silently overwritten; corrections should be represented by a new auditable transaction.
-
-Before implementation, inspect the existing `ADJUSTMENT` stock-movement behavior and any direct inventory-quantity update paths. Decide whether those paths should be restricted, replaced, or retained for a narrowly defined initialization process.
-
-**Exit criteria:** authorized, reasoned, transaction-safe adjustments with a clear audit trail and tests for insufficient stock and invalid input.
-
-### Step 3 — Suppliers
+### Step 2 — Suppliers
 
 Add supplier records for businesses that provide ingredients. Start with the fields the business actually needs, such as name, contact details, address, status, and notes if justified.
 
@@ -114,7 +99,7 @@ Add supplier records for businesses that provide ingredients. Start with the fie
 
 **Exit criteria:** staff can manage and search supplier records; deactivation does not erase historical references.
 
-### Step 4 — Purchase receiving / stock-in
+### Step 3 — Purchase receiving / stock-in
 
 Record incoming stock with its source instead of relying only on unexplained manual stock increases.
 
@@ -131,6 +116,21 @@ Decide before coding:
 Do not implement full purchasing, supplier payment, accounts payable, or purchase-order approval unless the business needs them. Receiving stock and managing supplier payments are separate business processes.
 
 **Exit criteria:** posting a receiving record increases stock exactly once and creates traceable stock movements; failed or repeated requests do not duplicate stock.
+
+### Step 4 — Inventory controls and stock adjustments
+
+Make inventory corrections traceable before building more workflows on top of stock balances.
+
+Recommended requirements:
+- Only authorized staff can create adjustments.
+- Every adjustment records product, quantity change, reason, timestamp, and actor where supported by the schema.
+- Positive and negative adjustments are validated; stock must not become negative unless a future, explicit business rule permits it.
+- The inventory balance and stock movement are updated atomically.
+- Historical adjustments are not silently overwritten; corrections should be represented by a new auditable transaction.
+
+Before implementation, inspect the existing `ADJUSTMENT` stock-movement behavior and any direct inventory-quantity update paths. Decide whether those paths should be restricted, replaced, or retained for a narrowly defined initialization process.
+
+**Exit criteria:** authorized, reasoned, transaction-safe adjustments with a clear audit trail and tests for insufficient stock and invalid input.
 
 ### Step 5 — Delivery and order workflow review
 
