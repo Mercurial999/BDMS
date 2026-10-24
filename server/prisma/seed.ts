@@ -165,6 +165,24 @@ const permissions = [
     description: "Delete sales",
   },
 
+  // Orders
+  {
+    name: "orders.read",
+    description: "View orders",
+  },
+  {
+    name: "orders.create",
+    description: "Create orders",
+  },
+  {
+    name: "orders.update",
+    description: "Update orders",
+  },
+  {
+    name: "orders.delete",
+    description: "Delete orders",
+  },
+
   // Reports
   {
     name: "reports.read",
