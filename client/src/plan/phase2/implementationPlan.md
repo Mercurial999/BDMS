@@ -1,12 +1,12 @@
 # BDMS Phase 2 Implementation Plan
 
-**Status:** Phase 2 started — Step 0 baseline and safety checkpoint in progress  
-**Review date:** 2026-10-24  
+**Status:** Step 0 baseline/source review complete; Phase 2 feature work may proceed with per-feature safety gates  
+**Review date:** 2026-10-27  
 **Repository:** `Mercurial999/BDMS`
 **Development branch:** `phase-2-development` (keep `main` as the stable Phase 1 baseline)  
 **Progress tracker:** [Phase 2 Progress Tracker](./progress-tracker.md) — update it only when work and verification evidence justify a status change.  
 **Scope:** Phase 2 operations upgrade while protecting the existing Phase 1 workflows. Proceed one lesson/feature at a time. Inspect the current implementation before coding; make only the changes required for the active step.  
-**Review boundary:** This plan began as a Markdown-only review. Source code, API behavior, database state, and runtime must still be verified read-only before implementation. No feature should be marked complete until its acceptance criteria and relevant tests have passed.
+**Review boundary:** Step 0 is closed for planning/source-baseline purposes so independent Phase 2 work can proceed. This does not claim runtime, migration, backup/restore, or full regression checks passed. Inspect the exact code and API contracts before each feature; establish a verified backup and separate test database before schema-changing or stock-mutating work. No feature should be marked complete until its acceptance criteria and relevant tests have passed.
 
 ## 1. Executive recommendation
 
@@ -516,7 +516,9 @@ Use the existing native-fetch API helper. Do not add Axios. The frontend should 
 
 ## 9. Git workflow
 
-Use small feature branches, for example:
+**Project-specific workflow decision (2026-10-27):** The user wants completed Phase 2 features committed directly to `phase-2-development`, with the relevant Markdown tracker/plan updated in the same feature commit. Do not switch to `main` or create a separate feature branch unless the user changes this preference. Keep commits small, inspect `git status` and diffs first, and never discard unrelated or untracked work. A multi-file documentation update should be one commit containing both the tracker and plan.
+
+Use small feature branches only if the user later approves that workflow, for example:
 
 ```text
 feature/phase2-inventory-workflow
@@ -591,4 +593,4 @@ Phase 2 is complete when:
 - Delivery Receipts can be generated/printed from delivery records with correct actual quantities and agreed customer/order details, without changing stock when printed.
 - Builds, tests, and release notes are complete.
 
-**Final recommendation:** Start with Step 0. Next resolve the documented Product → Inventory → Stock-In frontend flow using existing backend functionality if possible. Then build Suppliers and Purchase Receiving as separate, reviewable features. Do not start returns, delivery-status expansion, or a broad permission refactor until the core stock-in path is proven safe and the relevant business decisions are confirmed.
+**Final recommendation (updated 2026-10-27):** Step 0 source/planning review and Step 1 focused manual workflow review are documented as complete; runtime/release checks remain outstanding and must not be reported as passed. Next inspect and implement Suppliers as an independent feature on `phase-2-development`, updating the tracker and plan with verified evidence in the same commit. Before Purchase Receiving or other stock-mutating/schema-changing work, verify database backup/restore and a separate test database, and resolve the documented stock-mutation risks. Do not start returns, delivery-status expansion, or a broad permission refactor until the core stock-in path is proven safe and the relevant business decisions are confirmed.

@@ -1,8 +1,8 @@
 # BDMS Phase 2 Progress Tracker
 
 **Current branch:** `phase-2-development`  
-**Overall status:** IN PROGRESS — Step 0 safety checkpoint; Step 1 workflow verification complete  
-**Last updated:** 2026-10-24  
+**Overall status:** IN PROGRESS — Step 0 baseline/source review complete; Step 1 focused workflow verification complete  
+**Last updated:** 2026-10-27  
 **Rule:** Mark a task COMPLETE only after its acceptance criteria and relevant tests have passed. A code change or successful build alone does not complete a feature.
 
 ## Status key
@@ -18,7 +18,7 @@ When a step is completed, update this file and the relevant feature plan in the 
 
 | Step | Work item | Status | Completion condition |
 |---|---|---|---|
-| 0 | Phase 1 baseline and safety checkpoint | IN PROGRESS | Working tree/branch verified, backup and restore path checked, builds and core regression results recorded |
+| 0 | Phase 1 baseline review and safety boundaries | COMPLETE — REVIEW SCOPE ONLY | Source/planning baseline and known risks documented; outstanding runtime, backup/restore, build and regression checks remain required under Step 11 and each feature's verification gate |
 | 1 | Product → Inventory → existing Stock-In workflow review | COMPLETE | Actual API and UI behavior verified; safe existing stock-in path documented; frontend-only unless a backend gap is separately approved |
 | 2 | Suppliers master data | NOT STARTED | Supplier CRUD/deactivation, validation, authorization, UI and tests verified |
 | 3 | Purchase receiving / Stock-In | NOT STARTED | Receiving posts stock exactly once, with matching stock movements in one transaction |
@@ -30,37 +30,32 @@ When a step is completed, update this file and the relevant feature plan in the 
 | 9 | Reports and operational dashboard | NOT STARTED — INSPECT EXISTING FEATURES FIRST | Existing reports and dashboard are assessed before changes; only confirmed gaps are improved; results reconcile to source transactions |
 | 10 | Permission hardening (cross-cutting) | NOT STARTED | Every new write endpoint and sensitive report has backend authorization and 401/403/success tests |
 | 11 | Regression and release readiness | NOT STARTED | Builds, tests, migration review, backup/restore check, Docker smoke tests, and release notes recorded |
-## Step 0 — Phase 1 baseline and safety checkpoint
+## Step 0 — Phase 1 baseline review and safety boundaries
 
-**Status: IN PROGRESS**
+**Status: COMPLETE — REVIEW SCOPE ONLY (2026-10-27)**
 
-### Preparation checklist
-- [ ] Confirm local branch is `phase-2-development`.
-- [ ] Check `git status --short`; protect all uncommitted work (do not discard changes).
-- [ ] Fetch/pull the latest `phase-2-development` documentation and verify this tracker is present locally.
-- [ ] Record the baseline commit SHA.
-- [ ] Confirm the intended Phase 2 development database is separate from the Phase 1 database.
-- [ ] Create a database backup and confirm a safe restore procedure to a separate test database. Do not reset the working database.
-- [ ] Check Prisma migration status without applying/resetting migrations.
-- [ ] Run backend build.
-- [ ] Run frontend lint and build.
-- [ ] Record the result of the login, products, inventory, stock movements, customers, orders, deliveries, sales, dashboard and reports checks.
-- [ ] Test the order → confirm → draft delivery → complete delivery flow in a safe test database.
-- [ ] Verify insufficient stock and repeated completion do not cause partial or duplicate stock deductions.
+The user chose to close the planning/source-review checkpoint so independent Phase 2 work can proceed. This does **not** mean that unperformed runtime checks passed. Outstanding build, migration, backup/restore and full regression checks remain mandatory before release. Verify a backup and a separate test database before schema-changing or stock-mutating work is tested.
 
-### Step 0 results
+### Review checklist
+- [x] Confirmed the intended branch is `phase-2-development` from the user's local Git output.
+- [x] Confirmed the Phase 2 tracker and implementation plan exist under `client/src/plan/phase2/`.
+- [x] Reviewed the Phase 2 roadmap and documented the focused Product → Inventory → Stock-In manual workflow as Step 1.
+- [x] Documented known stock-integrity risks and the need to avoid unsafe inventory mutation paths.
+- [x] Separated source/planning review completion from runtime and release verification.
+
+### Outstanding runtime and release checks — NOT YET VERIFIED
 
 | Item | Result / evidence |
 |---|---|
-| Baseline commit | Not recorded yet |
-| Backend build | Not run yet |
-| Frontend lint/build | Not run yet |
-| Migration status | Not checked yet |
-| Backup and restore verification | Not checked yet |
-| Phase 1 workflow regression | Not run yet |
-| Notes / blockers | Awaiting local checks |
+| Baseline commit | `cbfc570` reported by the user on 2026-10-27; recheck locally before the next commit/push |
+| Backend build | Not run / not evidenced in this review |
+| Frontend lint/build | Focused frontend build passed during Step 1; full current lint/build not evidenced here |
+| Migration status | Not checked / not evidenced here |
+| Backup and restore verification | Not checked; verify against a separate test database before risky database work |
+| Full Phase 1 workflow regression | Not run / not evidenced here |
+| Order-to-delivery duplicate/insufficient-stock tests | Not run / not evidenced here |
 
-**Do not start schema-changing work until the database safety and baseline checks are understood.** If backup/restore or Phase 1 regression cannot be verified, mark the relevant item BLOCKED and resolve it first.
+**Gate for upcoming work:** Supplier master data can proceed independently after inspecting current authorization and data conventions. Do not implement or test schema-changing/stock-mutating features against the only working database; establish and verify a backup plus a separate test database first. Complete all outstanding checks in Step 11 before release.
 
 ## Initial read-only source inspection (not runtime verification)
 
@@ -73,7 +68,7 @@ The following observations are from reading the repository source on `phase-2-de
 - [!] **Stock integrity risk:** the current generic stock-movement service handles `ADJUSTMENT` by setting inventory quantity equal to the movement quantity, rather than applying a documented delta. Do not implement Phase 2 adjustments by blindly reusing this behavior.
 - [!] **Validation gap to verify:** the current inventory and stock-movement schemas validate non-negative/positive numbers but do not enforce integer quantities consistently. The business rule remains whole-number quantities; test and address this deliberately in the appropriate approved feature rather than making an unrelated schema change now.
 - **Prerequisite before new stock-changing features:** review and resolve the direct inventory-update and ambiguous adjustment paths, and define the approved server-side stock-mutation approach before implementing purchase receiving. This investigation does not mark the full Step 4 inventory-adjustment feature complete.
-- [ ] Run local builds, migration checks, backup/restore checks, and safe Phase 1 regression tests before marking Step 0 complete.
+- [x] Closed the source/planning review on 2026-10-27; runtime checks remain unverified and are tracked above and under Step 11.
 
 ## Per-feature completion checklist
 
@@ -173,4 +168,5 @@ Record decisions here before implementing behavior that depends on them.
 |---|---|
 | 2026-10-20 | Initial tracker created. Step 0 is in progress; no implementation task is marked complete. |
 | 2026-10-23 | Added Delivery Receipt generation/printing as Phase 2 Step 9; implementation remains not started pending layout, numbering, and document-history decisions. |
-| 2026-10-24 | Recorded the focused manual Product → Inventory → Stock-In verification and frontend build result as Step 1 COMPLETE; Step 0 safety checks remain in progress. |
+| 2026-10-24 | Recorded the focused manual Product → Inventory → Stock-In verification and frontend build result as Step 1 COMPLETE. |
+| 2026-10-27 | Closed Step 0 as baseline/source-review complete at the user's direction. Outstanding runtime, migration, backup/restore and full regression checks remain unverified; no results were fabricated. |
