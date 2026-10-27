@@ -19,6 +19,7 @@ export const createStockMovementSchema = z
     ]),
     quantity: z
         .number()
+        .int("Quantity must be a whole number.")
         .positive("Quantity must be greater than zero."),
     reference: z
         .string()
