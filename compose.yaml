@@ -1,3 +1,4 @@
+name: bdms
 
 services:
   db:
