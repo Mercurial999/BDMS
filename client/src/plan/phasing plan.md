@@ -1,627 +1,303 @@
-Bakery Distribution Management System (BDMS)
-Development Roadmap — Phase 1 to Future Scaling
-Project Direction
-The goal of the Bakery Distribution Management System (BDMS) is to create a practical system for managing the operations of a bakery distribution business.
-The system will initially focus on the internal operations of the business, particularly staff, products, inventory, bakery stores, deliveries, and reports.
-The system will be developed in phases.
-The main principle is:
-Build a smaller operational system first, finish it completely, then scale it with future upgrades.
-This prevents the project from becoming unnecessarily large while still keeping the architecture ready for future expansion.
-________________________________________
-1. Important Business Decision
-Bakery Stores Will NOT Have User Accounts in Phase 1
-Bakery stores will be treated as customers/business entities, not system users.
-For example:
-Store
-•	ID 
-•	Store Name 
-•	Address 
-•	Contact Person 
-•	Phone Number 
-•	Status 
-•	Created At 
-•	Updated At 
-Example:
-Mary's Bakery
-•	Address: Koronadal 
-•	Contact Person: Maria Santos 
-•	Phone: 09XXXXXXXXX 
-•	Status: ACTIVE 
-There will be no:
-•	Store password 
-•	Store login 
-•	Store authentication 
-•	Store role 
-Instead, staff members will use the system and record the orders/deliveries for the bakery stores.
-This makes the first version much smaller and easier to complete.
-________________________________________
-2. Difference Between Users and Stores
-The system will separate these two concepts.
-System Users
-These are people who actually log into BDMS.
-Examples:
-•	Admin 
-•	Manager 
-•	Staff 
-They belong to the users table.
-Bakery Stores
-These are businesses/customers that receive bakery ingredients.
-Examples:
-•	Mary's Bakery 
-•	J&J Bakeshop 
-•	ABC Bakery 
-They belong to the stores table.
-Therefore:
-User = person operating the system
-Store = business/customer receiving products
-This separation should remain even when the system becomes larger.
-________________________________________
-3. Phase 1 — Operational MVP
-Goal
-The goal of Phase 1 is to create a working internal bakery distribution system that can actually be used for the basic business workflow.
-The first version will contain:
-1.	Authentication 
-2.	Users 
-3.	Products 
-4.	Inventory 
-5.	Stores 
-6.	Deliveries 
-7.	Basic Reports 
-________________________________________
-4. Phase 1 Modules
-4.1 Authentication & Users
-Purpose:
-Allow staff members to securely access the system.
-Initial responsibilities:
-•	Staff login 
-•	User accounts 
-•	Roles 
-•	Basic authorization 
-Possible roles:
-•	Admin 
-•	Manager 
-•	Staff 
-We will keep the existing User/Role architecture because it will be useful later when permissions become more advanced.
-________________________________________
-5. Products Module
-Purpose:
-Manage the bakery ingredients/products distributed to stores.
-Examples:
-•	Flour 
-•	Sugar 
-•	Yeast 
-•	Margarine 
-•	Chocolate 
-•	Milk 
-•	Other bakery ingredients 
-Possible functionality:
-•	Create product 
-•	View products 
-•	Update product 
-•	Activate/deactivate product 
-•	View product information 
-________________________________________
-6. Inventory Module
-Purpose:
-Track the available quantity of bakery ingredients.
-The inventory module will handle:
-•	Current stock 
-•	Stock-in 
-•	Stock-out 
-•	Stock movements 
-•	Inventory validation 
-•	Transaction-safe stock updates 
-The inventory system should maintain a history of stock movements.
-Example:
-Flour
-Starting stock:
-100 kg
-Delivery:
-30 kg
-Remaining:
-70 kg
-Stock movement:
-Type: OUT
-Reason: DELIVERY
-Quantity: 30 kg
-Reference: DEL-2026-0001
-The concurrency protection already implemented in the project should remain part of the inventory foundation.
-________________________________________
-7. Stores Module
-Purpose:
-Manage the bakery stores that receive products.
-The Stores module should initially support:
-•	Create store 
-•	View stores 
-•	View individual store 
-•	Update store 
-•	Activate/deactivate store 
-•	Search/filter stores 
-Example:
-Mary's Bakery
-J&J Bakeshop
-ABC Bakery
-The stores do not need accounts in Phase 1.
-________________________________________
-8. Delivery Module
-This will become one of the most important modules of BDMS.
-A delivery connects:
-Staff + Store + Products + Inventory
-Example:
-Delivery #: DEL-2026-0001
+# Bakery Distribution Management System (BDMS)
+## Development Roadmap — Phase 1 Active Development, Future Backlog
 
-Store:
-Mary's Bakery
+**Current development phase:** PHASE 1 — ACTIVE / IN DEVELOPMENT  
+**Phase 2 status:** DEFERRED — FUTURE BACKLOG ONLY  
+**Roadmap policy:** Phase 1 remains active while the system is being developed, improved, corrected, and verified. A working feature does not mean the whole phase or system is complete. Phase 2 does not start automatically.
 
-Delivered By:
-John - Staff
+---
 
-Items:
+## 1. Project direction
 
-Flour       30 kg
-Sugar       10 kg
-Yeast        5 kg
-When the delivery is confirmed:
-Delivery
-   ↓
-Validate Inventory
-   ↓
-Database Transaction
-   ↓
-Deduct Inventory
-   ↓
-Create Stock Movement
-   ↓
-Save Delivery
-________________________________________
-9. Important Architecture Rule
-The Delivery module should not directly manipulate inventory quantities.
-For example, the Delivery module should not simply do something like:
-inventory.quantity = inventory.quantity - delivery.quantity
-Instead:
-Delivery Module
-       ↓
-Inventory Service
-       ↓
-Validate Stock
-       ↓
-Database Transaction
-       ↓
-Update Inventory
-       ↓
-Create Stock Movement
-This keeps inventory logic centralized.
-It also protects the system against problems such as:
-•	insufficient stock 
-•	concurrent deliveries 
-•	incorrect stock movements 
-•	inconsistent inventory data 
-This is especially important because the inventory/concurrency functionality has already been developed.
-________________________________________
-10. Phase 1 Main Business Workflow
-The main workflow will be:
-Staff Login
-      ↓
-Select Bakery Store
-      ↓
-Create Delivery
-      ↓
-Add Products
-      ↓
-Enter Quantities
-      ↓
-Validate Inventory
-      ↓
-Database Transaction
-      ↓
-Deduct Inventory
-      ↓
-Create Stock Movement
-      ↓
-Save Delivery
-      ↓
-Generate/View Report
-This is the first major end-to-end workflow we want to complete.
-________________________________________
-11. Phase 1 Backend Architecture
-We will continue using a feature-based modular architecture.
-Conceptually:
-src/
-│
-├── modules/
-│   │
-│   ├── auth/
-│   ├── users/
-│   ├── products/
-│   ├── inventory/
-│   ├── stores/
-│   ├── deliveries/
-│   └── reports/
-│
-├── shared/
-│   ├── middleware/
-│   ├── errors/
-│   ├── utilities/
-│   └── ...
-│
-├── app.ts
-└── index.ts
-Each major business module should contain its own responsibilities.
-For example:
-stores/
-├── store.controller.ts
-├── store.service.ts
-├── store.repository.ts
-├── store.routes.ts
-├── store.validation.ts
-└── store.types.ts
-We will adjust the exact structure according to the backend structure that already exists instead of unnecessarily rewriting working code.
-________________________________________
-12. Phase 1 Completion Criteria
-Phase 1 will be considered complete when the following workflow works:
-Staff
-•	Staff can log in. 
-•	Staff has an appropriate role. 
-Products
-•	Products can be created. 
-•	Products can be viewed. 
-•	Products can be updated. 
-•	Products can be activated/deactivated. 
-Inventory
-•	Current stock can be viewed. 
-•	Stock can be added through controlled transactions. 
-•	Stock can be deducted through controlled transactions. 
-•	Stock movements are recorded. 
-•	Concurrency protection works. 
-Stores
-•	Staff can create bakery stores. 
-•	Staff can view stores. 
-•	Staff can update stores. 
-•	Staff can activate/deactivate stores. 
-Deliveries
-•	Staff can create a delivery. 
-•	A delivery can be assigned to a bakery store. 
-•	Products can be added to the delivery. 
-•	Quantities can be entered. 
-•	Inventory is validated. 
-•	Inventory is safely deducted. 
-•	Stock movements are created. 
-•	Delivery information is stored. 
-Reports
-Basic reports should eventually show information such as:
-•	Current inventory 
-•	Stock movements 
-•	Deliveries 
-•	Products delivered 
-•	Store delivery history 
-________________________________________
-13. What We Are NOT Building Yet
-To keep the project manageable, Phase 1 will intentionally not include:
-•	Bakery-store login 
-•	Customer accounts 
-•	Online ordering 
-•	Customer portal 
-•	Mobile application 
-•	Complex approval systems 
-•	Route optimization 
-•	Multiple warehouses 
-•	Advanced notifications 
-•	Every possible BIR reporting requirement 
-•	Large-scale analytics 
-These features are not rejected.
-They are simply postponed until the core system is operational.
-________________________________________
-14. Phase 2 — Operations Upgrade
-After Phase 1 is completed and stable, we move to Phase 2.
-The goal is to make the system more useful for actual business operations.
-Phase 2 Features
-Suppliers
-Add suppliers that provide bakery ingredients.
-Possible functionality:
-•	Supplier records 
-•	Supplier contact information 
-•	Supplier status 
-•	Supplier products 
-________________________________________
-Purchase Receiving / Stock-In
-Instead of manually increasing inventory, the system can record where stock came from.
-Example:
-Supplier
-    ↓
-Purchase/Receiving
-    ↓
-Products
-    ↓
-Inventory Stock-In
-    ↓
-Stock Movement
-Example:
-Supplier: ABC Trading
+BDMS is an internal bakery distribution management system for managing staff, products, inventory, customers, orders, deliveries, sales, and operational reports.
 
-Flour: 500 kg
+The system is being developed incrementally. We will continue working on Phase 1 even when some modules are already usable. We may revisit a module when testing, business feedback, integration work, or a newly discovered issue requires it.
 
-Received Date:
-August 28, 2026
-________________________________________
-Stock Adjustments
-Allow authorized staff to correct inventory when necessary.
-Examples:
-•	Damaged goods 
-•	Expired products 
-•	Counting errors 
-•	Missing stock 
-•	Other approved adjustments 
-Every adjustment should have a reason.
-________________________________________
-Returns
-Eventually support:
-Delivery
-    ↓
-Customer Return
-    ↓
-Return Items
-    ↓
-Inventory Adjustment
-This is useful when a bakery store returns damaged or incorrect products.
-________________________________________
-Delivery Status
-Add statuses such as:
-PENDING
-PREPARING
-OUT_FOR_DELIVERY
-DELIVERED
-CANCELLED
-RETURNED
-The exact statuses will be decided based on the actual business workflow.
-________________________________________
-Audit Logs
-Record important system actions.
-Example:
-User: John
-Action: UPDATE_PRODUCT
-Product: Flour
-Date: August 28, 2026
-This becomes particularly useful as the system grows.
-________________________________________
-Improved Reports
-Phase 2 reports can include:
-•	Daily deliveries 
-•	Monthly deliveries 
-•	Store delivery history 
-•	Product movement 
-•	Stock-in reports 
-•	Stock-out reports 
-•	Inventory adjustments 
-•	Returns 
-•	Supplier reports 
-________________________________________
-Stronger Permissions
-Instead of only having basic roles, we can eventually have more specific permissions.
-Example:
-Admin
- ├── Manage Users
- ├── Manage Products
- ├── Manage Inventory
- ├── Manage Stores
- ├── Manage Deliveries
- └── View Reports
+**Important:** Do not mark Phase 1 complete merely because the application runs or the main screens are usable. Do not move the project into Phase 2 just because a feature works. The user decides when the project is ready to begin Phase 2.
 
-Manager
- ├── Manage Inventory
- ├── Manage Stores
- ├── Manage Deliveries
- └── View Reports
+## 2. Important business decisions
 
-Staff
- ├── View Products
- ├── Record Deliveries
- └── View Allowed Information
-The exact permissions will be designed later.
-________________________________________
-15. Phase 3 — Customer Ordering
-Only after the internal system is stable should we consider allowing bakery stores to interact directly with BDMS.
-At this stage, bakery stores can optionally become system users.
-The workflow could become:
-Bakery Store
-      ↓
-Store Login
-      ↓
-Create Order
-      ↓
-Submit Order
-      ↓
-Staff Reviews Order
-      ↓
-Approve Order
-      ↓
-Prepare Delivery
-      ↓
-Deliver
-Possible features:
-•	Store accounts 
-•	Store login 
-•	Store dashboard 
-•	Online ordering 
-•	Order history 
-•	Order status 
-•	Order cancellation 
-•	Staff approval 
-•	Order-to-delivery workflow 
-This should be treated as an upgrade, not a requirement for the initial system.
-________________________________________
-16. Phase 4 — Business Scale
-If the business grows, the system can support more advanced business requirements.
+### 2.1 Customers are business records, not system users
+
+Bakery stores are represented by **Customers** in BDMS. They do not have login accounts in the current internal system.
+
+- Staff members are the people who log in and operate BDMS.
+- Customers represent bakeries/businesses that place orders and receive deliveries.
+- Customer login, customer roles, and a customer portal are not part of the current Phase 1 scope.
+
+### 2.2 Product and Inventory are separate
+
+- Product stores product information such as name, unit, price, description, and status.
+- Inventory stores current quantity and minimum-stock information.
+- Creating a product must not silently invent opening stock or a purchase.
+- Physical stock changes must use an approved backend operation and must be traceable through stock movements.
+
+### 2.3 Operational quantities
+
+The business rule is to use positive whole-number quantities for operational product/order/delivery quantities. Partial sacks or units such as 0.5 are not supported. Existing database fields and validation must be checked and aligned carefully; do not assume every current inventory field already enforces this rule.
+
+### 2.4 Order, Delivery, Inventory, and Sales responsibilities
+
+The intended workflow is:
+
+```text
+Staff login
+  -> Customer and product selection
+  -> Order
+  -> Confirmed order
+  -> Draft delivery
+  -> Complete delivery
+  -> Inventory deduction
+  -> OUT / SALE stock movement
+  -> Sales and reports reflect completed delivery
+```
+
+Important rules:
+- Creating or confirming an order does not deduct inventory.
+- Delivery completion is the stock-out point in the documented workflow.
+- Inventory deduction and the corresponding stock movement must be handled by the backend transaction.
+- The frontend must not separately deduct inventory or create a duplicate stock movement.
+- Sales are derived from completed deliveries in the current design; do not introduce a second sales-entry process without an approved business reason.
+
+---
+
+## 3. Phase 1 — Active internal system development
+
+<badge>ACTIVE — IN DEVELOPMENT</badge>
+
+**Goal:** Continue building and improving the internal BDMS workflows until the user decides that it is appropriate to begin the future Phase 2 backlog.
+
+Phase 1 is not being declared complete in this document. It is the current working phase and may include repeated improvements to existing modules.
+
+### 3.1 Phase 1 modules and current source-level observations
+
+The following statuses describe what was found in the reviewed repository source. They are not claims that the modules have passed complete runtime, business, security, or regression testing.
+
+| Area | Repository evidence | Planning status |
+|---|---|---|
+| Authentication | Login/auth routes and protected frontend routes exist | Implemented; continue verification |
+| Users and Roles | User and role pages, backend features, and permission middleware exist | Implemented; continue verification |
+| Products | Product page and backend feature exist | Implemented; continue verification |
+| Inventory | Inventory page, backend feature, and inventory schema exist | Working; known integrity/validation issues need review |
+| Stock Movements | Frontend/backend support and movement history exist | Working; verify all stock-change paths |
+| Customers | Customer page and backend feature exist | Implemented; continue authorization and workflow review |
+| Orders | Backend Orders feature and documented API workflow exist; current frontend route list does not include an Orders page | Backend exists; frontend workflow/integration remains to be addressed |
+| Deliveries | Delivery page, backend feature, and completion workflow exist | Working; continue end-to-end and failure-path testing |
+| Sales | Sales page and backend summary endpoint exist; current design derives sales from completed deliveries | Implemented; verify calculations and reconciliation |
+| Dashboard | Dashboard page and backend endpoint exist | Implemented; verify displayed values against source records |
+| Reports | Reports page and backend endpoints exist for sales, products, customers, inventory, stock movements, and deliveries | Implemented; continue reconciliation and export testing |
+| Docker / local operations | Docker Compose configuration exists | Continue environment, migration, backup, and restore checks |
+
+### 3.2 Active Phase 1 development work
+
+Work should be selected based on the actual issue or improvement being handled. The following are known areas to keep visible:
+
+1. **Orders frontend workflow**
+   - Review the existing backend Orders API and the current Deliveries page.
+   - Decide how staff should create, review, confirm, and track orders in the UI.
+   - Do not duplicate order creation inside multiple screens without a clear workflow.
+   - Keep the documented rule that stock is deducted only when the delivery is completed.
+
+2. **Inventory integrity**
+   - Review the direct inventory update endpoint that can change quantity without a corresponding movement.
+   - Review the current generic ADJUSTMENT movement semantics before relying on them.
+   - Enforce whole-number operational quantities consistently where required.
+   - Ensure every physical stock change has a clear reason/reference and a matching ledger entry.
+   - Preserve transaction safety and prevent duplicate stock deductions.
+
+3. **Authentication, authorization, and access**
+   - Verify protected routes and permissions on the backend, not only frontend visibility.
+   - Review customer and other route protection consistently.
+   - Verify inactive users cannot log in and that role/permission behavior matches the intended business rules.
+
+4. **Delivery and order workflow**
+   - Test order creation, confirmation, delivery creation, and delivery completion.
+   - Test insufficient stock, duplicate requests, repeated completion, invalid input, and transaction rollback.
+   - Confirm that related order/delivery statuses, inventory, and stock movements remain consistent.
+
+5. **Sales, dashboard, and reports**
+   - Reconcile totals to completed delivery records and their items.
+   - Verify date filters, customer/product groupings, inventory reports, and stock movement reports.
+   - Test CSV/PDF/print behavior where provided.
+   - Do not assume that a displayed report is correct solely because it loads.
+
+6. **General quality and operations**
+   - Run relevant frontend/backend builds and lint checks.
+   - Review API validation and error handling.
+   - Verify migrations against a separate test database.
+   - Verify backup and restore without risking the working database.
+   - Test Docker startup and service connectivity.
+   - Keep documentation aligned with the code and record evidence for important checks.
+
+### 3.3 How to record progress in Phase 1
+
+Use statuses that distinguish implementation from verification:
+
+- **NOT STARTED** — work has not begun.
+- **IN PROGRESS** — currently being investigated or implemented.
+- **WORKING — VERIFICATION PENDING** — the feature can be used, but relevant tests or edge cases remain.
+- **PARTIALLY VERIFIED** — some stated scenarios passed; remaining scenarios are listed.
+- **BLOCKED** — waiting for a decision, dependency, or environment fix.
+- **VERIFIED FOR SCOPE** — the defined scope and tests passed; this does not declare all of Phase 1 complete.
+
+A feature can move between these statuses as new issues or requirements are discovered. Do not use a feature's status to declare the entire Phase 1 complete.
+
+### 3.4 Phase 1 development rules
+
+1. Keep working on Phase 1 whenever existing workflows need improvement.
+2. Do not begin Phase 2 merely because Phase 1 modules are usable.
+3. Do not label a module complete without recording what was tested.
+4. Inspect the existing implementation before changing it.
+5. Preserve working business workflows and avoid unrelated refactoring.
+6. Keep inventory as the source of truth for available stock.
+7. Put validation, permissions, and business rules on the backend.
+8. Use the existing architecture and API helper; do not introduce unnecessary dependencies.
+9. Update the relevant plan/tracker when scope or evidence changes.
+10. Explain the business reason and inspect first; implement one focused task at a time.
+
+---
+
+## 4. Phase 2 — Operations upgrade (future backlog)
+
+<badge color="warning">DEFERRED — NOT ACTIVE</badge>
+
+**Purpose:** Retain future operational improvements without treating them as current development tasks.
+
+Nothing in this section is authorized to begin just because it appears in the backlog. Before starting Phase 2, the user must explicitly decide that the project is ready to move beyond the current Phase 1 development cycle.
+
+### 4.1 Suppliers
+
+- Supplier records and contact information.
+- Supplier status (active/inactive).
+- Optional supplier-product relationships, if the business needs them.
+- Supplier maintenance must not directly change inventory.
+
+### 4.2 Purchase Receiving / Stock-In
+
+- Record supplier, reference, received date, products, and quantities.
+- Post received quantities to inventory through a controlled backend transaction.
+- Create matching IN / PURCHASE stock movements.
+- Prevent duplicate or concurrent posting.
+- Decide whether unit cost and supplier-linked product lists are required.
+
+### 4.3 Stock Adjustments
+
+- Record stock discrepancies such as damage, expiry, counting errors, or missing stock.
+- Require a reason, actor, and reference.
+- Define whether users enter a counted quantity or a delta.
+- Preserve stock ledger consistency and enforce permissions.
+
+### 4.4 Customer Returns
+
+- Link returns to the original completed delivery.
+- Track returned quantities, reasons, and item condition.
+- Only approved resellable items may increase sellable inventory.
+- Keep original delivery and stock-out history intact.
+- Define how returns affect sales reports.
+
+### 4.5 Delivery Status improvements
+
+- Consider additional statuses only if the actual business workflow requires them.
+- Define allowed transitions and the exact point at which stock changes.
+- Do not add statuses only for the sake of having more statuses.
+
+### 4.6 Audit Logs
+
+- Record important actions such as supplier changes, receiving, adjustments, returns, delivery completion, and permission changes.
+- Record actor, action, entity, timestamp, and safe reference metadata.
+- Never log passwords, tokens, or other secrets.
+
+### 4.7 Improved Reports
+
+- Supplier receiving history.
+- Stock-in reports.
+- Adjustment reports.
+- Returns reports.
+- Stock reconciliation.
+- Audit history with restricted access.
+- Additional operational summaries after source-data rules are defined.
+
+### 4.8 Delivery Receipt (DR) generation and printing
+
+- Generate the document from the actual Delivery record.
+- Use actual delivered quantities, not merely the originally ordered quantities.
+- Confirm paper size/layout, numbering, copies, and historical reprint behavior with the business.
+- Previewing or printing must not change inventory, stock movements, or delivery status.
+- Do not represent a DR as a BIR-compliant sales invoice or official receipt without confirmation from the business's accountant.
+
+### 4.9 Stronger permissions
+
+- Review role/permission matrix for new operational actions.
+- Enforce authorization in backend routes.
+- Test unauthorized, forbidden, and authorized requests.
+- Do not rely on hiding frontend buttons as security.
+
+**Phase 2 safety note:** Before any schema-changing or stock-mutating Phase 2 feature, inspect the current implementation, confirm business rules, verify backup/restore to a separate test database, and test migrations and stock behavior without risking the working database.
+
+---
+
+## 5. Phase 3 — Customer ordering (longer-term)
+
+Only consider this after the internal staff workflow is stable and the user explicitly prioritizes customer-facing ordering.
+
 Potential features:
-Advanced Reporting
-•	Management dashboards 
-•	Sales/delivery analytics 
-•	Inventory analytics 
-•	Store performance 
-•	Product demand 
-•	Monthly/annual reports 
-BIR-Oriented Reporting
-The system can eventually be enhanced based on the business's actual BIR reporting requirements.
-We should not guess or overbuild these requirements now.
-When this phase arrives, we can identify the actual reports and data required and design them properly.
-Multiple Locations
-If the business grows:
-Main Warehouse
-       ↓
-Distribution Branch 1
-Distribution Branch 2
-Distribution Branch 3
-The inventory architecture can eventually be expanded to support multiple warehouses or locations.
-________________________________________
-17. Phase 5 — Multi-Platform System
-If the business becomes large enough, BDMS could eventually have:
-                 BDMS Backend
-                      │
-        ┌─────────────┼─────────────┐
-        ↓             ↓             ↓
-   Staff Web      Store Web      Mobile App
-Possible platforms:
-•	Staff Web Portal 
-•	Bakery Store Portal 
-•	Delivery Staff Mobile App 
-•	Customer Ordering 
-•	Notifications 
-•	Online ordering 
-•	Delivery tracking 
-But this is a long-term direction, not something we should build now.
-________________________________________
-18. Recommended Development Order
-This is the roadmap we should follow.
-CURRENT PHASE
-Inventory Foundation
-        ↓
-Stores Module
-        ↓
-Delivery Database
-        ↓
-Delivery Backend
-        ↓
-Delivery + Inventory Integration
-        ↓
-Postman Testing
-        ↓
-Frontend Integration
-        ↓
-Basic Reports
-        ↓
-PHASE 1 COMPLETE
-AFTER PHASE 1
-PHASE 2
-Operations Upgrade
-        ↓
-Suppliers
-        ↓
-Purchase Receiving
-        ↓
-Stock Adjustments
-        ↓
-Returns
-        ↓
-Delivery Status
-        ↓
-Audit Logs
-        ↓
-Improved Reports
-        ↓
-Role Permissions
-AFTER PHASE 2
-PHASE 3
-Customer Ordering
-        ↓
-Store Accounts
-        ↓
-Store Login
-        ↓
-Online Orders
-        ↓
-Order Approval
-        ↓
-Order → Delivery
-LONG TERM
-PHASE 4
-Business Scale
-        ↓
-Advanced Reports
-        ↓
-BIR-Oriented Reports
-        ↓
-Multiple Locations
-        ↓
-Advanced Inventory
-        ↓
-Analytics
-FUTURE
-PHASE 5
-Multi-Platform
-        ↓
-Customer Portal
-        ↓
-Mobile App
-        ↓
-Online Ordering
-        ↓
-Delivery Tracking
-        ↓
-Notifications
-________________________________________
-19. Development Philosophy
-We should follow these rules throughout the project:
-Rule 1 — Finish before expanding
-Don't start Phase 2 while Phase 1 is still broken.
-Rule 2 — Build the business workflow, not just CRUD
-For example, creating a delivery is more important than simply having a deliveries table.
-Rule 3 — Protect data integrity
-Inventory must always remain accurate.
-Rule 4 — Keep modules separated
-Delivery logic should not become mixed with authentication, product logic, or inventory internals.
-Rule 5 — Don't over-engineer too early
-A medium-sized business does not mean we need to build an enterprise system immediately.
-Rule 6 — Design for future expansion
-We should avoid architectural decisions that make Phase 2 or Phase 3 difficult.
-Rule 7 — Every feature must have a business reason
-If a feature does not solve a real operational problem, it can wait.
-________________________________________
-20. The Main Goal
-The first goal is not:
-"Build the biggest bakery distribution system possible."
-The first goal is:
-"Build a working system that a staff member can actually use to manage products, inventory, stores, and deliveries."
-Once that works reliably, we expand it.
-This gives us a much better development strategy:
-Small → Working → Tested → Useful → Scalable
-________________________________________
-21. FUTURE HANDOFF — PHASE 2
-When Phase 1 is finished, save the following text. You can paste it into a future conversation with me:
-We are continuing the Bakery Distribution Management System (BDMS) project.
-Phase 1 is complete and operational.
-The important business decision is that bakery stores do NOT have user accounts in the current version. Bakery stores are customer/business records, while staff members are the actual system users who record deliveries and manage operations.
-Phase 1 contains:
-•	Authentication / Users 
-•	Products 
-•	Inventory 
-•	Stores 
-•	Deliveries 
-•	Basic Reports 
-The main workflow is:
-Staff Login → Select Bakery Store → Create Delivery → Add Products and Quantities → Validate Inventory → Transaction-safe Inventory Deduction → Create Stock Movements → Save Delivery → Reports
-The backend uses a feature-based modular architecture.
-Delivery should use the centralized Inventory business logic instead of directly manipulating inventory quantities.
-Now we are ready to begin Phase 2 — Operations Upgrade.
-Phase 2 priorities are:
-1.	Suppliers 
-2.	Purchase Receiving / Stock-In 
-3.	Stock Adjustments 
-4.	Returns 
-5.	Delivery Status 
-6.	Audit Logs 
-7.	Improved Reports 
-8.	Stronger Role-Based Permissions 
-Before changing anything, review the existing backend, frontend, Prisma schema, and current module structure. Do not assume the code structure. Work from the existing implementation.
-Teach me step-by-step, like our previous lessons. Explain the business reason first, then the database design, then the backend implementation, then Postman testing, and finally frontend integration where applicable.
-Do not jump to Phase 3 customer accounts or online ordering unless I explicitly ask for it.
-Continue from Phase 2 and keep the system practical, maintainable, and scalable.
+- Customer accounts and login.
+- Customer portal/dashboard.
+- Online order submission.
+- Customer order history and status.
+- Staff review and approval.
+- Order-to-delivery integration.
 
+Customer accounts are not part of the current internal Phase 1 system.
+
+## 6. Phase 4 — Business scale (longer-term)
+
+Potential future capabilities:
+- Advanced management analytics.
+- More detailed operational and BIR-oriented reports based on actual business/accounting requirements.
+- Multiple warehouses or distribution locations.
+- Advanced inventory planning and product-demand analysis.
+
+Do not guess BIR requirements or build multi-warehouse support before the business needs it.
+
+## 7. Phase 5 — Multi-platform system (long-term vision)
+
+Potential future platforms:
+- Staff web portal.
+- Customer web portal.
+- Delivery staff mobile app.
+- Delivery tracking and notifications.
+- Mobile workflows where there is a real operational need.
+
+This is a long-term direction, not a current implementation commitment.
+
+---
+
+## 8. Current development direction
+
+The current direction is deliberately simple:
+
+```text
+PHASE 1 — ACTIVE / IN DEVELOPMENT
+  -> Continue improving existing modules
+  -> Complete missing UI/backend integration
+  -> Fix data-integrity and authorization gaps
+  -> Test end-to-end business workflows
+  -> Reconcile sales, dashboard, and reports
+  -> Improve deployment and operational safety
+
+PHASE 2 — DEFERRED BACKLOG
+  -> Do not start until the user explicitly decides to move forward
+```
+
+There is no automatic Phase 1 completion date or automatic Phase 2 start. The roadmap is allowed to remain in Phase 1 for as long as the system needs development.
+
+## 9. Handoff instruction for future work
+
+When continuing BDMS work, use this direction:
+
+"We are continuing the Bakery Distribution Management System (BDMS). Phase 1 is still ACTIVE / IN DEVELOPMENT. The system is already working in some areas, but it is not declared complete. Do not move to Phase 2 or implement Phase 2 backlog features unless I explicitly ask to begin them. First inspect the current repository, identify the specific Phase 1 task, review existing architecture and code, and guide me step by step. Distinguish working features from features that are verified for a defined scope. Preserve existing workflows, avoid unrelated changes, and update the relevant plan/tracker with evidence."
+
+---
+
+**Roadmap maintenance rule:** Update this document when business decisions or actual implementation status change. Never rewrite the status to "Phase 1 complete" simply to advance the phase number.
