@@ -63,7 +63,7 @@ Important rules:
 
 ## 3. Phase 1 — Active internal system development
 
-<badge>ACTIVE — IN DEVELOPMENT</badge>
+**Status: ACTIVE — IN DEVELOPMENT**
 
 **Goal:** Continue building and improving the internal BDMS workflows until the user decides that it is appropriate to begin the future Phase 2 backlog.
 
@@ -159,7 +159,7 @@ A feature can move between these statuses as new issues or requirements are disc
 
 ## 4. Phase 2 — Operations upgrade (future backlog)
 
-<badge color="warning">DEFERRED — NOT ACTIVE</badge>
+**Status: DEFERRED — NOT ACTIVE**
 
 **Purpose:** Retain future operational improvements without treating them as current development tasks.
 
