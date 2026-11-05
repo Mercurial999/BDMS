@@ -1,0 +1,78 @@
+# BDMS Project Development Guide
+
+## 1. Project direction
+
+BDMS is an ongoing Bakery Distribution Management System for a bakery-ingredient distribution business. Development is organized around individual features, business workflows, defects, improvements, and verification—not rigid phase-completion gates.
+
+A feature that is usable today may still need refinement, security review, testing, or integration work later. Work can move between features when business priorities require it. Preserve stable workflows and make changes incrementally.
+
+## 2. Architecture principles
+
+- The frontend uses a **pages-based structure**: route-level screens live in `client/src/pages/`; shared UI belongs in `components/`, layouts in `layouts/`, API calls in `services/`, and shared helpers in `lib/`.
+- The backend uses a **feature-oriented structure**: business modules live in `server/src/features/<feature>/`. Use only the layers a feature needs; do not create empty files to satisfy a template.
+- Frontend and backend folder structures do not need to mirror each other. They serve different responsibilities.
+- Keep API communication on the existing native-fetch helper. Do not add Axios or duplicate token/header handling without an explicit decision.
+- Business rules, authorization, stock calculations, and state transitions belong on the backend—not only in the UI.
+- Keep database schema changes in Prisma schema/migrations and regenerate the Prisma client through the established project workflow.
+- Keep secrets in ignored environment files. Never commit passwords, JWT secrets, database credentials, tokens, or real customer-sensitive data.
+
+See the repository-root `ARCHITECTURE.md` for the technical reference and `system-structure.md` for the current folder map and request flows.
+
+## 3. Feature-based workflow
+
+For each requested feature or improvement:
+
+1. **Clarify the outcome.** Explain the business problem and expected behavior in plain language.
+2. **Inspect before editing.** Check the current branch and working tree, then read the relevant frontend page/service/types, backend routes/controller/service/repository/validation, Prisma schema, and related tests/docs.
+3. **Confirm business rules.** Identify permissions, status transitions, quantity rules, edge cases, and data-integrity effects. Ask before deciding unresolved business behavior.
+4. **Plan the smallest safe change.** State which files and layers need changes and which should remain untouched.
+5. **Implement incrementally.** Avoid unrelated refactors and preserve existing conventions.
+6. **Verify the feature.** Run relevant tests, API checks, frontend/backend builds and lint commands as applicable. Test error paths and regression-sensitive workflows.
+7. **Review the diff.** Check for accidental changes, generated files, secrets, and unrelated formatting.
+8. **Document evidence.** Update `feature-status.md`, the relevant feature note, and `development-log.md` when appropriate.
+9. **Commit and push when the user is ready.** Do not assume local changes are committed or that the local working tree is clean.
+
+Do not mark a feature as verified solely because it compiles. Record exactly what was tested and what remains unverified.
+
+## 4. Feature status vocabulary
+
+Use these labels consistently in `feature-status.md`:
+
+- **Working — needs ongoing verification:** usable behavior is present, but this is not a claim of complete release testing.
+- **In progress:** active implementation or integration work is underway.
+- **Needs improvement:** the feature exists but has known gaps or planned refinements.
+- **Needs verification:** code or historical evidence exists, but current end-to-end behavior has not been freshly confirmed.
+- **Planned:** not yet implemented or not yet started.
+- **Blocked / decision needed:** work depends on a business or technical decision.
+
+Statuses describe the evidence available at the last review. Recheck the current branch and local changes before relying on them.
+
+## 5. Business rules to preserve
+
+- BDMS is an internal staff system. Bakery customers are business records, not login accounts.
+- There is one Admin account. The Admin can create and deactivate staff; inactive staff must not log in. Do not add multi-admin/last-admin/self-deactivation complexity unless requirements change.
+- Products and Inventory are separate concepts.
+- Operational product quantities are whole numbers. Validate this consistently at API and database boundaries where applicable.
+- Creating or confirming an order does not deduct inventory.
+- Completing a delivery is the stock-deduction point in the documented workflow. Inventory changes and matching stock movements must be atomic and protected against duplicate completion.
+- Sales are derived from completed deliveries in the current design. Do not create a second manual sales-entry workflow without explicit approval.
+- Reports draw from Sales, Products, Inventory, Stock Movements, Customers, and Deliveries.
+- Delivery Receipt generation/printing was previously deferred. Reconfirm business requirements before starting it.
+
+These rules are project decisions, not a substitute for inspecting the current implementation before changing it.
+
+## 6. Documentation map
+
+- `ARCHITECTURE.md` — technical architecture reference at repository root.
+- `system-structure.md` — current frontend/backend folder map, request flow, and boundaries.
+- `feature-status.md` — feature-by-feature status and verification gaps.
+- `development-log.md` — dated record of implementation, decisions, tests, and commits.
+- `docker-guide.md` — local development, current Compose workflow, and future deployment separation.
+- `features/` — focused feature notes; create or update a note when a feature needs durable requirements or implementation details.
+- `phase2/` — retained historical planning/backlog material. It is not a mandatory development sequence.
+
+Older planning notes are retained as historical context until their useful decisions are consolidated. Do not delete them merely because this guide replaces phase-based planning.
+
+## 7. Updating documentation
+
+Update documentation when a business rule, API contract, architecture boundary, feature status, Docker workflow, or verification result materially changes. Prefer concise, evidence-based notes. Distinguish current facts from historical observations and proposed future work.

@@ -1,11 +1,11 @@
 # BDMS Repository Architecture
 
 **Repository:** `Mercurial999/BDMS`  
-**Branch reviewed:** `phase-2-development`  
-**Reviewed:** 2026-10-24  
+**Branch reviewed:** `feature/phase-2-suppliers`  
+**Reviewed:** 2026-11-05  
 **Purpose:** A durable reference for the repository layout, application boundaries, request flow, data model, and safe development conventions. Update this document when the architecture materially changes.
 
-> **Scope note:** This document is based on files currently committed to `phase-2-development` and the source files inspected for this review. It does not automatically include uncommitted changes on a developer's local computer. Re-check the branch after those changes are committed and pushed.
+> **Scope note:** This document reflects a repository review of `feature/phase-2-suppliers` on 2026-11-05 and selected source files inspected for that review. It does not automatically include uncommitted changes on a developer's local computer. Re-check the branch after those changes are committed and pushed.
 
 ## 1. System overview
 
@@ -46,7 +46,7 @@ The backend's HTTP entry point is `server/src/index.ts`, which imports `server/s
 - `src/types/` — shared TypeScript types.
 - `src/assets/` — static assets.
 - `src/index.css` — global styles.
-- `src/plan/phase2/` — Phase 2 planning, branching, and progress-tracking documents. These are project documentation, not runtime code.
+- `src/plan/` — project development documentation, feature status, feature notes, and Docker guidance. These are project documentation, not runtime code. See `project-development-guide.md` for the current feature-based workflow.
 
 **Frontend request flow**
 
@@ -174,22 +174,24 @@ The backend uses Prisma's generated client under `src/generated/prisma`; regener
 
 ### Docker
 
-The repository uses Docker/Compose for a frontend, backend, and PostgreSQL development runtime. Check the actual Compose file and environment variables before changing service names, host ports, database URLs, or build contexts. Rebuild images after source/configuration changes when testing the containerized app; a running container does not automatically contain new local source code unless a configured bind mount provides it.
+The current root `compose.yaml` runs PostgreSQL, a production-built backend image, and an Nginx-served frontend image. It is a containerized integration/runtime workflow, not a hot-reload Compose development stack. Native local development uses the frontend/backend development servers with a separately running PostgreSQL service. A future production deployment configuration should be kept separate and created only when the hosting target and operational requirements are known. See `client/src/plan/docker-guide.md`.
 
-## 8. Phase 2 documentation and workflow
+## 8. Current development workflow
 
-Phase 2 work belongs on `phase-2-development`; keep `main` as the stable Phase 1 baseline unless the project owner explicitly changes that policy.
+BDMS uses ongoing feature-based development rather than mandatory Phase 1 / Phase 2 completion gates. Features may be implemented, improved, corrected, integrated, or redesigned as business priorities require.
 
-Before a feature:
-1. Read `client/src/plan/phase2/implementationPlan.md` and `progress-tracker.md`.
-2. Inspect the existing route, service, repository, validation, Prisma schema, and UI/service flow relevant to the feature.
-3. Check the current branch and working tree; preserve uncommitted changes.
-4. Confirm business decisions and data-safety requirements before schema or stock-flow changes.
-5. Implement the smallest feature-scoped change.
-6. Run relevant builds, lint/tests, and regression checks.
-7. Update the implementation plan and progress tracker with evidence, limitations, and commit/PR reference.
+Use `client/src/plan/project-development-guide.md` for the workflow and `feature-status.md` for the latest evidence-based status snapshot. Older phase planning documents are retained as historical context/backlog material; they are not an active sequence that blocks work on other features.
 
-Do not mark a step complete just because code compiles. Keep Phase 1 behavior stable, avoid unrelated refactors, and do not run destructive database or Git commands as a shortcut.
+Before changing a feature:
+1. Inspect the current branch and working tree; preserve uncommitted changes.
+2. Read the relevant frontend page/service/types, backend feature layers, route middleware, Prisma schema, and related documentation.
+3. Confirm business rules, authorization, data integrity, and unresolved decisions.
+4. Implement the smallest safe feature-scoped change.
+5. Run relevant tests, builds, lint checks, and regression workflows.
+6. Review the diff for secrets, generated files, and unrelated changes.
+7. Update feature status and development notes with exact verification evidence.
+
+Do not claim a feature is complete solely because it compiles. Do not run destructive database or Git commands as a shortcut.
 
 ## 9. Known verification gaps
 
@@ -207,3 +209,4 @@ These are review prompts, not claims that every issue is currently present:
 | Date | Change |
 |---|---|
 | 2026-10-24 | Initial architecture reference created from the committed `phase-2-development` source and Phase 2 project context. |
+| 2026-11-05 | Refreshed repository branch/date, clarified feature-based development, and distinguished native development from the current Compose runtime and future deployment setup. |

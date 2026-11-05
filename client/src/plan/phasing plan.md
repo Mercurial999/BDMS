@@ -1,9 +1,7 @@
 # Bakery Distribution Management System (BDMS)
-## Development Roadmap — Phase 1 Active Development, Future Backlog
+## Historical Phase-Based Roadmap — Retained for Reference
 
-**Current development phase:** PHASE 1 — ACTIVE / IN DEVELOPMENT  
-**Phase 2 status:** DEFERRED — FUTURE BACKLOG ONLY  
-**Roadmap policy:** Phase 1 remains active while the system is being developed, improved, corrected, and verified. A working feature does not mean the whole phase or system is complete. Phase 2 does not start automatically.
+> **ARCHIVED AS AN ACTIVE ROADMAP (2026-11-05):** BDMS now uses ongoing feature-based development. This document is retained for historical business decisions and backlog details; it is not the active development guide and Phase 1 / Phase 2 are not mandatory development gates. See `project-development-guide.md`, `feature-status.md`, and `development-log.md` for the current workflow.
 
 ---
 
