@@ -197,7 +197,7 @@ Do not claim a feature is complete solely because it compiles. Do not run destru
 
 These are review prompts, not claims that every issue is currently present:
 
-- Confirm all Orders endpoints have the intended authentication and permission middleware after local Phase 2 changes are merged.
+- Confirm all Orders endpoints have the intended authentication and permission middleware after the latest local changes are committed and pushed.
 - Verify stock movements and inventory balances remain consistent for every stock-changing path.
 - Confirm integer-quantity validation is consistent across inventory and stock-movement endpoints if whole-number quantities are the business rule.
 - Confirm Prisma migration and backup/restore workflows against a separate test database before schema changes.
@@ -210,3 +210,4 @@ These are review prompts, not claims that every issue is currently present:
 |---|---|
 | 2026-10-24 | Initial architecture reference created from the committed `phase-2-development` source and Phase 2 project context. |
 | 2026-11-05 | Refreshed repository branch/date, clarified feature-based development, and distinguished native development from the current Compose runtime and future deployment setup. |
+| 2026-11-07 | Consolidated project documentation under `docs/`; the root README is the entry point and this file remains the technical architecture reference. |
