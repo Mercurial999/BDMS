@@ -16,7 +16,7 @@ A feature that is usable today may still need refinement, security review, testi
 - Keep database schema changes in Prisma schema/migrations and regenerate the Prisma client through the established project workflow.
 - Keep secrets in ignored environment files. Never commit passwords, JWT secrets, database credentials, tokens, or real customer-sensitive data.
 
-See the repository-root `ARCHITECTURE.md` for the technical reference and `system-structure.md` for the current folder map and request flows.
+See the repository-root `ARCHITECTURE.md` for the technical reference and folder map.
 
 ## 3. Feature-based workflow
 
@@ -65,14 +65,16 @@ These rules are project decisions, not a substitute for inspecting the current i
 
 ## 6. Documentation map
 
-- `ARCHITECTURE.md` — technical architecture reference at repository root.
-- `system-structure.md` — current frontend/backend folder map, request flow, and boundaries.
-- `feature-status.md` — feature-by-feature status and verification gaps.
-- `development-log.md` — dated record of implementation, decisions, tests, and commits.
-- `docker-guide.md` — local development, current Compose workflow, and future deployment separation.
-- `features/` — focused feature notes; create or update a note when a feature needs durable requirements or implementation details.
-- `backlog.md` — prioritized follow-up work, proposed enhancements, and unresolved business decisions.
-- `phase2/` — legacy phase-based plans retained as a historical archive; do not use them as active instructions.
+- Repository-root `README.md` — repository entry point and links to the main guides.
+- Repository-root `ARCHITECTURE.md` — technical architecture, folder map, request flow, and application boundaries.
+- `feature-status.md` — evidence-based feature status and verification gaps.
+- `backlog.md` — proposed work, priorities, and unresolved business decisions.
+- `development-log.md` — dated decisions, implementation notes, commits, and verification evidence.
+- `local-development.md` — native development, Docker Compose, ports, environment configuration, and database safety.
+- `workflows/` — durable descriptions of important business workflows, including order-to-delivery and inventory/stock.
+- `features/` — focused feature notes when a feature needs durable requirements or implementation decisions.
+- `prompts/` — reusable prompts for feature work and repository maintenance.
+- `archive/` — historical planning context only; never use archived phase labels or branch instructions as current guidance.
 
 The project no longer uses Phase 1, Phase 2, or numbered phase-completion gates. Choose work by business priority, defects, feature gaps, and verification needs. Use feature-oriented branch names such as `feature/suppliers`, `fix/customer-route-security`, or `docs/development-guide`. Inspect the current branch strategy before choosing a base branch.
 
