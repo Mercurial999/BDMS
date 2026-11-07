@@ -72,7 +72,7 @@ These rules are project decisions, not a substitute for inspecting the current i
 - `docker-guide.md` — local development, current Compose workflow, and future deployment separation.
 - `features/` — focused feature notes; create or update a note when a feature needs durable requirements or implementation details.
 - `backlog.md` — prioritized follow-up work, proposed enhancements, and unresolved business decisions.
-- `archive/phase-based-planning/` — historical plans retained for reference only; do not use them as active instructions.
+- `phase2/` — legacy phase-based plans retained as a historical archive; do not use them as active instructions.
 
 The project no longer uses Phase 1, Phase 2, or numbered phase-completion gates. Choose work by business priority, defects, feature gaps, and verification needs. Use feature-oriented branch names such as `feature/suppliers`, `fix/customer-route-security`, or `docs/development-guide`. Inspect the current branch strategy before choosing a base branch.
 
