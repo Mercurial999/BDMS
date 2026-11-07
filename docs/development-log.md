@@ -4,14 +4,14 @@
 
 - **Decision:** Repository documentation is organized under `docs/`, with the root `README.md` as the entry point and root `ARCHITECTURE.md` as the technical reference.
 - **Documentation:** Added `docs/workflows/inventory-and-stock.md` and consolidated historical phase planning context under `docs/archive/phase-based-planning.md`. Updated the development guide, architecture links, feature notes index, frontend README, and local-development cross-reference.
-- **Retirement:** The old system-structure and Docker guide duplicates are candidates for removal after the final reference scan. Historical source files are not deleted until the consolidated archive and links are verified.
+- **Retirement:** Removed duplicate Docker/system-structure guides and retired the old `client/src/plan/` planning set after consolidating its durable content into `docs/workflows/`, `docs/frontend-design-guidelines.md`, and `docs/archive/`. The former Phase 2 tracker and backup files were consolidated into the historical planning archive; no application source was changed.
 - **Verification:** GitHub file inspection and documentation-link review only. No local frontend/backend build, lint, database, Docker, or runtime checks were run.
 
 
 ## 2026-11-07 — Retire phase-based planning
 
 - **Decision:** BDMS officially uses ongoing feature-based development. Phase 1 / Phase 2 / numbered phase-completion labels are retired and must not be used as active gates or status labels.
-- **Documentation:** `feature-status.md` is the authoritative feature status snapshot; `backlog.md` records flexible follow-up work and open decisions; `project-development-guide.md` defines the workflow; root `ARCHITECTURE.md` remains the technical reference.
+- **Documentation:** `feature-status.md` is the authoritative feature status snapshot; `backlog.md` records flexible follow-up work and open decisions; `docs/development-guide.md` defines the workflow; root `ARCHITECTURE.md` remains the technical reference.
 - **Historical records:** Previous phase roadmaps, implementation plans, progress trackers, and branching notes are retained as historical references, not active instructions.
 - **Repository review:** Source snapshot `edd668f476985b23f25ff0626f49d4836c7c163c` was inspected. The Orders API exists but no Orders frontend route was found; Customer and Delivery route protection needs verification; stock adjustment semantics and Decimal database quantity columns were documented.
 - **Verification:** GitHub source inspection only. No local build, lint, migration, database, or end-to-end workflow checks were run during this documentation review.
