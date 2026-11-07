@@ -1,3 +1,7 @@
+> **ARCHIVED — 2026-11-07.** This is a historical planning document, not an active roadmap, task tracker, or branching instruction. BDMS now uses ongoing feature-based development; Phase 1 / Phase 2 / numbered phase gates are retired. Use `../project-development-guide.md`, `../feature-status.md`, and `../backlog.md` for current direction. The original content below is preserved for historical context only.
+
+---
+
 # Phase 2 Branching & Safety Plan
 
 ## Goal
