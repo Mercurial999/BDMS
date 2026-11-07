@@ -48,6 +48,31 @@ Receiving a product increases its available inventory. The system should preserv
 
 Only quantities that were actually received should be posted to inventory. The system must not invent supplier deliveries, quantities, prices, or costs.
 
+### 3.1 Supplier-source stock tracking
+
+After a supplier delivers products to the business warehouse and the receipt is accepted, the stock becomes the business's inventory. Supplier information is retained to identify the source of each received quantity; this is not consignment tracking and does not mean the stock remains owned by or stored at the supplier.
+
+The business wants to track both:
+
+- The total remaining quantity of each product in its warehouse.
+- The remaining quantity attributable to each supplier/source from which that product was received.
+
+For example, if the warehouse receives 100 units of a product from FY and 50 units of the same product from DNS, BDMS should be able to show a total of 150 units while also showing the separate FY and DNS source balances. These figures are illustrative only.
+
+A receipt should therefore remain identifiable as a source batch or receipt record. Stock issued through a completed customer delivery must reduce both the product's total warehouse balance and the appropriate source balance.
+
+### 3.2 Stock allocation rule
+
+The agreed allocation policy is **FIFO with manual override**:
+
+1. By default, BDMS should allocate stock from the oldest eligible receipt/source first (First In, First Out).
+2. Staff may manually choose a different available source when they know which source's physical stock was used or when an operational reason requires it.
+3. A manual selection must not allocate more than the available balance of that source.
+4. The system must retain the source allocation against the delivery so the remaining balance for each source can be calculated and audited.
+5. Regardless of source allocation, the total product inventory must be reduced by the total quantity delivered.
+
+The business should be able to review received, allocated/delivered, and remaining quantities by supplier/source. FIFO is the default allocation behavior; it does not mean stock is physically separated in the warehouse.
+
 ## 4. Starting and ending inventory
 
 The business needs to know the starting and ending quantity of each product for a selected reporting period.
@@ -65,7 +90,7 @@ Ending Inventory =
     Starting Inventory
     + Stock Received
     - Stock Delivered
-    +/− Approved Stock Adjustments
+    +/- Approved Stock Adjustments
 ```
 
 The ending inventory of one period becomes the starting inventory of the next period, subject to the business's stock-count and period-closing process.
@@ -82,7 +107,7 @@ When products are delivered to customers, the business needs a delivery record t
 - Products and quantities delivered.
 - Relevant status and notes.
 
-Completed deliveries reduce available inventory. The same delivery must not deduct stock more than once.
+Completed deliveries reduce available inventory. The same delivery must not deduct stock more than once. The source or receipt allocation used for each delivered quantity must also be recorded according to the FIFO-with-manual-override rule above.
 
 Customer records should contain the information needed to identify customers and associate their deliveries and payments with the correct account.
 
@@ -111,18 +136,21 @@ The original requirements describe operational reports that help the business re
 - Ending inventory by product.
 - Physical count versus recorded balance.
 - Low-stock and out-of-stock products.
+- Remaining stock by product and supplier/source.
 
 ### Supplier reports
 - Supplier directory and status.
 - Products associated with each supplier.
 - Receiving history by supplier.
 - Total quantities received from each supplier over a selected period.
+- Delivered/allocated and remaining quantities by supplier/source.
 
 ### Delivery and customer reports
 - Delivery Receipt register.
 - Delivered products and quantities.
 - Delivery history by customer.
 - Customer transaction summaries.
+- Source allocation details for delivered stock, where needed for traceability.
 
 ### Payment reports
 - Payments received over a selected period.
@@ -150,6 +178,8 @@ Reports should support date and relevant supplier, product, or customer filters.
 8. Quantities must follow the business's confirmed unit and whole-number rules.
 9. Do not invent product prices, costs, quantities, supplier details, or customer payment information.
 10. Any distinction between FY-owned stock, FY-supplied stock held by Falcore, and Falcore-purchased stock should only be tracked if the business confirms that ownership/source affects how stock is recorded, reported, or reconciled.
+11. Supplier/source attribution records where received stock came from; after acceptance into the warehouse, the stock is the business's inventory and must be included in the total warehouse balance.
+12. Delivery allocation follows FIFO by default, with staff permitted to override the source selection. Allocations must not exceed the selected source's available balance and must remain traceable to the delivery.
 
 ## 9. Scope and implementation note
 
