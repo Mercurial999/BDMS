@@ -16,6 +16,7 @@ BDMS is an internal operations system for a bakery-ingredient distribution busin
 |---|---|
 | Understand the project and development workflow | [Development guide](docs/development-guide.md) |
 | Understand the frontend/backend architecture | [Architecture](ARCHITECTURE.md) |
+| Follow the approved frontend visual and interaction conventions | [Frontend design guidelines](docs/frontend-design-guidelines.md) |
 | Run BDMS locally or with Docker | [Local development guide](docs/local-development.md) |
 | Check feature implementation status and verification gaps | [Feature status](docs/feature-status.md) |
 | Review proposed work and unresolved decisions | [Backlog](docs/backlog.md) |
