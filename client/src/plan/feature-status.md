@@ -2,59 +2,70 @@
 
 **Repository reviewed:** `Mercurial999/BDMS`  
 **Branch reviewed:** `feature/phase-2-suppliers`  
-**Branch head at review:** `61787584d63f640f2b8025a2a321d97a762c965f`  
-**Review date:** 2026-11-05
+**Source snapshot reviewed:** `edd668f476985b23f25ff0626f49d4836c7c163c`  
+**Review date:** 2026-11-07
 
-> This is a snapshot of available repository evidence, not a live status dashboard. It does not include uncommitted local changes. Statuses must be refreshed after inspecting current code and testing the workflow.
+> This is an evidence-based snapshot of committed source inspected on the date above. It is not a live dashboard and excludes uncommitted local changes. Repository presence is not proof of complete runtime verification.
+
+## Official development status
+
+**BDMS is in active, ongoing feature-based development.**
+
+The project does not use Phase 1, Phase 2, or numbered phase-completion gates. Work is selected by business priority, defects, feature gaps, operational risk, and verification needs. Existing features may be revisited at any time. Historical phase plans are archived and are not active instructions.
 
 ## Status definitions
 
-- **Working — needs ongoing verification:** implementation is present and has been used, but not all release checks are implied.
-- **In progress:** active development is underway.
-- **Needs improvement:** known gaps or refinements remain.
-- **Needs verification:** historical/code evidence exists, but current end-to-end behavior needs a fresh check.
+- **Working — needs ongoing verification:** implementation is present and has been used, but complete release testing is not implied.
+- **In progress:** active implementation or integration work is underway.
+- **Needs improvement:** the feature exists but has known gaps or planned refinements.
+- **Needs verification:** source or historical evidence exists, but current end-to-end behavior has not been freshly confirmed.
 - **Planned:** not yet implemented or not yet started.
-- **Decision needed:** blocked on a business decision.
+- **Blocked / decision needed:** work depends on a business or technical decision.
 
 ## Feature overview
 
-| Feature | Snapshot status | Notes / next verification |
+| Feature / area | Current status | Evidence and next action |
 |---|---|---|
-| Authentication | Working — needs ongoing verification | Login and Admin access have been used. Recheck token expiry, inactive-user rejection, and protected API routes when changing auth. |
-| Users / Roles / Permissions | Needs verification | User and role modules exist. Verify one-Admin rules, staff activation/deactivation, and endpoint permission coverage. |
-| Products | Working — needs ongoing verification | Product screens and backend feature exist. Recheck validation and product/inventory separation. |
-| Inventory | Needs improvement | Inventory module exists. Re-verify whole-number enforcement, direct quantity update behavior, and ledger consistency before stock changes. |
-| Stock Movements | Needs verification | Feature exists and a historical manual stock-in check was recorded. Recheck IN/OUT/ADJUSTMENT semantics and authorization. |
-| Customers | Needs verification | Feature exists. Recheck customer route authentication/permissions and status behavior. |
-| Orders | Needs verification | Backend feature exists. Previously inspected frontend route list did not include an Orders screen; verify current UI integration and full workflow. |
-| Deliveries | Working — needs ongoing verification | Delivery feature exists. Re-test completion transaction, insufficient stock, duplicate/retry behavior, and matching OUT movement. |
-| Sales | Working — needs ongoing verification | Sales module exists and current design derives sales from completed deliveries. Reconcile totals against source deliveries. |
-| Dashboard | Needs verification | Dashboard feature and frontend screen exist. Recheck data accuracy and empty/loading/error states. |
-| Reports | Needs verification | Reports feature and frontend screen exist. Reconcile report totals with source data and verify permissions. |
-| Suppliers | Planned | No implementation is asserted by this documentation review. Confirm requirements before starting. |
-| Purchase Receiving / Stock-In enhancements | Planned | Define supplier, reference, quantity, cost, posting, and exactly-once rules before implementation. |
-| Customer Returns | Planned | Define disposition and impact on sellable stock and sales reporting. |
-| Stock Adjustments | Needs improvement / decision needed | Confirm counted quantity vs delta semantics, roles, and audit requirements before implementation. |
-| Delivery Receipt printing | Planned / decision needed | Previously deferred. Confirm paper layout, numbering, required fields, and reprint behavior with the business. |
-| Audit Logs | Planned | Define critical events, access, retention, and safe metadata. |
-| Docker deployment setup | Planned | Current Compose setup exists; a separate production deployment configuration and operational procedure have not been verified in this review. |
+| Authentication | Working — needs ongoing verification | Login/JWT and active-account checks exist. Recheck token/session behavior and API protection when changing access control. |
+| Users / Roles / Permissions | Needs verification | Backend and frontend modules exist. Verify the one-Admin/staff rules and endpoint-by-endpoint permission coverage. |
+| Products | Working — needs ongoing verification | Product UI and backend feature exist. Preserve separation between product details and stock quantity. |
+| Inventory | Needs improvement | Inventory module exists. API/service checks enforce whole-number quantities in inspected paths, but Prisma quantity columns are Decimal; review database-level enforcement and all stock-changing paths. |
+| Stock Movements | Needs verification | Movement feature exists. Verify IN/OUT/ADJUSTMENT behavior, authorization, and balance-to-ledger reconciliation. |
+| Customers | Needs improvement | Customer UI/API exist. Customer route protection was not visible in the reviewed route file; verify and enforce backend authentication/permissions. |
+| Orders | Needs improvement | Backend Orders API exists, but the reviewed frontend route list has no Orders page/route. Decide and implement the required staff workflow if still needed. |
+| Deliveries | Needs improvement | UI/API and transactional completion logic exist. Delivery route protection was not visible in the reviewed route file; verify it. Re-test insufficient stock, duplicate completion, and rollback. |
+| Sales | Working — needs ongoing verification | Sales derives from completed deliveries in the current design. Reconcile totals against delivery records. |
+| Dashboard | Needs verification | UI/API exist. Reconcile displayed metrics and test loading, empty, and error states. |
+| Reports | Needs verification | UI/API exist. Reconcile outputs against source records and verify report permissions/exports. |
+| Suppliers | Planned | No Supplier model or feature implementation was found in the reviewed branch snapshot. Confirm fields, deactivation behavior, and permissions before implementation. |
+| Purchase Receiving / Stock-In | Planned | Define supplier/reference/cost requirements and safe exactly-once stock posting before implementation. |
+| Customer Returns | Planned | Define return eligibility, item disposition, inventory effects, and sales reporting. |
+| Delivery Receipt printing | Planned / decision needed | Previously deferred. Confirm layout, numbering, required fields, and reprint behavior with the business. |
+| Audit Logs | Planned | Define critical events, actor data, access, retention, and safe metadata. |
+| Inventory reconciliation / controls | Needs improvement | Confirm every physical stock change has a matching movement and documented reason. |
 
-## Cross-feature verification priorities
+## Current review findings
 
-1. Reconcile inventory balances with stock-movement history for every stock-changing path.
-2. Verify whole-number quantity validation consistently.
-3. Verify backend authentication and permissions on every protected route.
-4. Exercise order → delivery → inventory deduction → sales/reporting as one end-to-end workflow.
-5. Verify database migration and backup/restore procedures against a separate test database.
-6. Run frontend lint/build and backend build before considering a change ready to merge.
+- Customer and Delivery route files inspected during the source review did not show the authentication/authorization middleware pattern used by several other protected features. Verify complete route composition and close any missing protection before treating these APIs as secure.
+- The Orders backend feature exists, but no Orders frontend route/page was present in the inspected route list.
+- The inventory update service accepts minimum-stock changes rather than direct quantity edits.
+- The stock-movement service treats an ADJUSTMENT quantity as the new counted stock balance. Preserve this meaning unless the business explicitly approves a different rule.
+- API/service checks enforce integer quantities in the inspected paths, while Prisma stores Inventory and StockMovement quantities as Decimal. Consider database-level enforcement as a separate, carefully planned change.
+- Delivery completion uses a transaction, locks inventory, and creates corresponding OUT movements. Re-test failure and retry paths in a safe database.
+- The inspected package scripts expose build/lint commands but no configured test script was found. Builds, lint, database checks, and end-to-end tests were not run as part of this GitHub source review.
 
-## Updating this tracker
+## Recommended work queue
 
-When a feature changes, record the new status only after reviewing the relevant implementation. Include:
-- What changed.
-- Which workflow was tested.
-- Exact commands or manual test evidence.
-- What remains untested.
-- Related commit or pull request, once available.
+1. Verify authentication and authorization on Customer and Delivery APIs.
+2. Decide the required Orders frontend workflow and integrate it if still needed by staff.
+3. Reconcile inventory balances and stock-movement history; verify all stock-changing paths.
+4. Run the critical staff workflow: order → delivery → inventory deduction → sales/reports.
+5. Confirm migration safety and backup/restore using a separate test database.
+6. Implement Suppliers when requirements and acceptance criteria are confirmed.
+7. Consider receiving, returns, receipt printing, audit logs, and reporting enhancements as separate feature requests.
 
-Do not use phase completion labels. A feature can be usable and still have future improvements.
+This is a suggested order based on reviewed risks, not a rigid sequence. The user may reprioritize work at any time.
+
+## Verification record
+
+For each status change, record what changed, which workflow and scenarios were tested, exact commands and outcomes, what remains untested, and the related commit or pull request. Do not mark a feature verified solely because it compiles. Do not claim a full regression or release check unless it was actually performed.
