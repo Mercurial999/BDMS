@@ -134,7 +134,7 @@ Inventory and stock movements are related but serve different purposes:
 - Treat adjustment behavior as a business rule requiring explicit definition; do not assume that an `ADJUSTMENT` quantity is a delta versus a counted final balance without checking the service implementation and approved requirements.
 - Delivery completion is a sensitive stock-changing action. Verify transaction behavior, duplicate/retry behavior, insufficient-stock handling, and rollback before modifying it.
 
-The Phase 2 tracker records known inventory integrity risks and verification tasks. Read it before implementing receiving, adjustments, returns, or other stock-changing features.
+The feature-status tracker and backlog record known inventory integrity risks and verification tasks. Review them before implementing receiving, adjustments, returns, or other stock-changing features.
 
 ## 6. Authentication and permissions
 
@@ -146,7 +146,7 @@ The Phase 2 tracker records known inventory integrity risks and verification tas
 - The client stores the token under `bdms_token` and asks the backend for the current user's permission names.
 - Backend authorization must be enforced on the API. Hiding a button or route in the frontend is not sufficient protection.
 
-**Security review reminder:** inspect every write endpoint and sensitive read/report endpoint for both authentication and the intended permission. Test unauthenticated (401), authenticated-but-forbidden (403), and authorized success cases. The exact current middleware coverage can change as Phase 2 work is merged.
+**Security review reminder:** inspect every write endpoint and sensitive read/report endpoint for both authentication and the intended permission. Test unauthenticated (401), authenticated-but-forbidden (403), and authorized success cases. The exact current middleware coverage can change as features and fixes are merged.
 
 ## 7. Environment, build, and generated files
 
@@ -180,7 +180,7 @@ The current root `compose.yaml` runs PostgreSQL, a production-built backend imag
 
 BDMS uses ongoing feature-based development rather than mandatory Phase 1 / Phase 2 completion gates. Features may be implemented, improved, corrected, integrated, or redesigned as business priorities require.
 
-Use `client/src/plan/project-development-guide.md` for the workflow and `feature-status.md` for the latest evidence-based status snapshot. Older phase planning documents are retained as historical context/backlog material; they are not an active sequence that blocks work on other features.
+Use `client/src/plan/project-development-guide.md` for the workflow, `feature-status.md` for the latest evidence-based status snapshot, and `backlog.md` for prioritized follow-up work. Historical phase-based plans are archived for reference only and are not active instructions.
 
 Before changing a feature:
 1. Inspect the current branch and working tree; preserve uncommitted changes.
@@ -201,7 +201,7 @@ These are review prompts, not claims that every issue is currently present:
 - Verify stock movements and inventory balances remain consistent for every stock-changing path.
 - Confirm integer-quantity validation is consistent across inventory and stock-movement endpoints if whole-number quantities are the business rule.
 - Confirm Prisma migration and backup/restore workflows against a separate test database before schema changes.
-- Confirm frontend lint/build, backend build, and Phase 1 order-to-delivery regression checks in the local environment.
+- Confirm frontend lint/build, backend build, and order-to-delivery regression checks in the local environment.
 - Revisit this document after significant folder, API, database, authentication, or deployment changes.
 
 ## 10. Architecture change log
