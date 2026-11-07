@@ -180,7 +180,7 @@ The current root `compose.yaml` runs PostgreSQL, a production-built backend imag
 
 BDMS uses ongoing feature-based development rather than mandatory Phase 1 / Phase 2 completion gates. Features may be implemented, improved, corrected, integrated, or redesigned as business priorities require.
 
-Use `client/src/plan/project-development-guide.md` for the workflow, `feature-status.md` for the latest evidence-based status snapshot, and `backlog.md` for prioritized follow-up work. Historical phase-based plans are archived for reference only and are not active instructions.
+Use `client/src/plan/project-development-guide.md` for the workflow, `feature-status.md` for the latest evidence-based status snapshot, and `backlog.md` for prioritized follow-up work. The legacy `client/src/plan/phase2/` folder contains archived phase-based plans for reference only; these are not active instructions.
 
 Before changing a feature:
 1. Inspect the current branch and working tree; preserve uncommitted changes.
