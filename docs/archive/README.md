@@ -13,6 +13,7 @@ This folder contains historical plans and notes that are useful for understandin
 
 ## Archived reference
 
-- [Historical phase plans and decisions](phase-based-planning.md) — consolidated business direction, proposed future workflows, open decisions, and the limited historical verification evidence from the former phase-based planning documents.
+- [Historical phase plans and decisions](phase-based-planning.md) — consolidated business direction, proposed future workflows, open decisions, and limited historical verification evidence from former phase-based planning documents.
+- [Historical frontend planning notes](frontend-planning-notes.md) — superseded frontend plans, inventory visibility analysis, sales/report integration notes, and UI suggestions. Current visual conventions are in `../frontend-design-guidelines.md`.
 
 New archive files should be added only when they preserve useful history that no longer belongs in an active guide. Do not archive duplicates merely to keep every obsolete file.
