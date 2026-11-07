@@ -370,6 +370,8 @@ Avoid running destructive database commands against a database containing import
 - [Development Guide](./development-guide.md)
 - [Feature Status](./feature-status.md)
 - [Backlog](./backlog.md)
-- [Docker Environment](../ARCHITECTURE.md)
+- [Frontend Design Guidelines](./frontend-design-guidelines.md)
+- [Inventory and Stock Workflow](./workflows/inventory-and-stock.md)
+- [Current Compose configuration](../compose.yaml)
 
 This guide describes the current inspected development configuration. If ports, environment variables, Docker services, or CORS settings change, update this document to match the actual source configuration.
