@@ -46,7 +46,7 @@ The backend's HTTP entry point is `server/src/index.ts`, which imports `server/s
 - `src/types/` — shared TypeScript types.
 - `src/assets/` — static assets.
 - `src/index.css` — global styles.
-- `src/plan/` — project development documentation, feature status, feature notes, and Docker guidance. These are project documentation, not runtime code. See `project-development-guide.md` for the current feature-based workflow.
+- Project documentation lives under repository-root `docs/`; it is not frontend runtime code. See `docs/development-guide.md` for the current feature-based workflow.
 
 **Frontend request flow**
 
@@ -174,13 +174,13 @@ The backend uses Prisma's generated client under `src/generated/prisma`; regener
 
 ### Docker
 
-The current root `compose.yaml` runs PostgreSQL, a production-built backend image, and an Nginx-served frontend image. It is a containerized integration/runtime workflow, not a hot-reload Compose development stack. Native local development uses the frontend/backend development servers with a separately running PostgreSQL service. A future production deployment configuration should be kept separate and created only when the hosting target and operational requirements are known. See `client/src/plan/docker-guide.md`.
+The current root `compose.yaml` runs PostgreSQL, a production-built backend image, and an Nginx-served frontend image. It is a containerized integration/runtime workflow, not a hot-reload Compose development stack. Native local development uses the frontend/backend development servers with a separately running PostgreSQL service. A future production deployment configuration should be kept separate and created only when the hosting target and operational requirements are known. See `docs/local-development.md`.
 
 ## 8. Current development workflow
 
 BDMS uses ongoing feature-based development rather than mandatory Phase 1 / Phase 2 completion gates. Features may be implemented, improved, corrected, integrated, or redesigned as business priorities require.
 
-Use `client/src/plan/project-development-guide.md` for the workflow, `feature-status.md` for the latest evidence-based status snapshot, and `backlog.md` for prioritized follow-up work. The legacy `client/src/plan/phase2/` folder contains archived phase-based plans for reference only; these are not active instructions.
+Use `docs/development-guide.md` for the workflow, `docs/feature-status.md` for the latest evidence-based status snapshot, and `docs/backlog.md` for prioritized follow-up work. Historical phase-planning context is consolidated under `docs/archive/` and is not active instruction.
 
 Before changing a feature:
 1. Inspect the current branch and working tree; preserve uncommitted changes.
