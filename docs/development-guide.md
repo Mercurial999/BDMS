@@ -71,6 +71,7 @@ These rules are project decisions, not a substitute for inspecting the current i
 - `backlog.md` — proposed work, priorities, and unresolved business decisions.
 - `development-log.md` — dated decisions, implementation notes, commits, and verification evidence.
 - `local-development.md` — native development, Docker Compose, ports, environment configuration, and database safety.
+- `frontend-design-guidelines.md` — approved frontend visual, responsive, and interaction conventions.
 - `workflows/` — durable descriptions of important business workflows, including order-to-delivery and inventory/stock.
 - `features/` — focused feature notes when a feature needs durable requirements or implementation decisions.
 - `prompts/` — reusable prompts for feature work and repository maintenance.
