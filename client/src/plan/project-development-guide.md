@@ -32,6 +32,8 @@ For each requested feature or improvement:
 8. **Document evidence.** Update `feature-status.md`, the relevant feature note, and `development-log.md` when appropriate.
 9. **Commit and push when the user is ready.** Do not assume local changes are committed or that the local working tree is clean.
 
+Use descriptive feature/fix/docs branch names without phase prefixes. Confirm the intended base/integration branch before branching or merging; do not assume old phase-specific branching instructions remain active.
+
 Do not mark a feature as verified solely because it compiles. Record exactly what was tested and what remains unverified.
 
 ## 4. Feature status vocabulary
@@ -69,9 +71,10 @@ These rules are project decisions, not a substitute for inspecting the current i
 - `development-log.md` — dated record of implementation, decisions, tests, and commits.
 - `docker-guide.md` — local development, current Compose workflow, and future deployment separation.
 - `features/` — focused feature notes; create or update a note when a feature needs durable requirements or implementation details.
-- `phase2/` — retained historical planning/backlog material. It is not a mandatory development sequence.
+- `backlog.md` — prioritized follow-up work, proposed enhancements, and unresolved business decisions.
+- `archive/phase-based-planning/` — historical plans retained for reference only; do not use them as active instructions.
 
-Older planning notes are retained as historical context until their useful decisions are consolidated. Do not delete them merely because this guide replaces phase-based planning.
+The project no longer uses Phase 1, Phase 2, or numbered phase-completion gates. Choose work by business priority, defects, feature gaps, and verification needs. Use feature-oriented branch names such as `feature/suppliers`, `fix/customer-route-security`, or `docs/development-guide`. Inspect the current branch strategy before choosing a base branch.
 
 ## 7. Updating documentation
 
