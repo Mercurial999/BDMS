@@ -4,4 +4,4 @@ Create a focused Markdown note here when a feature needs durable requirements, b
 
 Suggested topics include authentication, products, inventory, customers, orders, deliveries, sales, reports, and suppliers. Add files when the feature work needs them; do not create empty documents for every possible feature in advance.
 
-For current feature status, see `../feature-status.md`. For the development workflow, see `../project-development-guide.md`.
+For current feature status, see `../feature-status.md`. For the development workflow, see `../development-guide.md`.
