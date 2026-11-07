@@ -80,7 +80,7 @@ The staff selects:
 - Positive whole-number quantity
 - Optional delivery notes
 
-The current frontend delivery form supports one product item per new delivery. The backend order model supports multiple items, so the frontend can later be expanded into a multi-item order workspace.
+An earlier inspection recorded that the frontend delivery form supported one product item per new delivery while the backend order model supported multiple items. Treat that as a historical observation, not a statement about the current UI; inspect the latest frontend and backend before planning multi-item workflow changes.
 
 ## Step 4: Frontend Creates The Order
 
