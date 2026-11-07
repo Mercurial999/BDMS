@@ -1,5 +1,13 @@
 # BDMS Development Log
 
+## 2026-11-07 — Consolidate repository documentation
+
+- **Decision:** Repository documentation is organized under `docs/`, with the root `README.md` as the entry point and root `ARCHITECTURE.md` as the technical reference.
+- **Documentation:** Added `docs/workflows/inventory-and-stock.md` and consolidated historical phase planning context under `docs/archive/phase-based-planning.md`. Updated the development guide, architecture links, feature notes index, frontend README, and local-development cross-reference.
+- **Retirement:** The old system-structure and Docker guide duplicates are candidates for removal after the final reference scan. Historical source files are not deleted until the consolidated archive and links are verified.
+- **Verification:** GitHub file inspection and documentation-link review only. No local frontend/backend build, lint, database, Docker, or runtime checks were run.
+
+
 ## 2026-11-07 — Retire phase-based planning
 
 - **Decision:** BDMS officially uses ongoing feature-based development. Phase 1 / Phase 2 / numbered phase-completion labels are retired and must not be used as active gates or status labels.
