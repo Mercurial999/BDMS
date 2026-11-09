@@ -1,12 +1,21 @@
 # BDMS Development Log
 
+## 2026-11-09 — Implement and verify Suppliers backend
+
+- **Feature / area:** Supplier master data API.
+- **Change:** Added the Supplier model and ACTIVE/INACTIVE status, database migration, repository, service, controller, validation schemas, and protected `/api/suppliers` routes. Existing supplier permissions are used for read/create/update/deactivate actions.
+- **Business scope:** Supplier name is required; contact person, phone, address, and notes are optional. Records are deactivated rather than deleted. Reactivation is available through update. Purchase receiving and stock posting are not part of this feature.
+- **Database safety:** Manual API checks used the separate Docker test database `bdms_restore_test`; no production database was used for this verification.
+- **Verification:** Manual API checks passed for list, create, get by ID, status filtering, case-insensitive duplicate rejection (409), blank-name validation (400), update, deactivate/reactivate, soft-deactivation persistence, repeated deactivation rejection (409), and unauthenticated request rejection (401). Backend `npm run build` completed successfully; TypeScript reported no errors.
+- **Remaining work:** Suppliers frontend page and API integration; automated tests; full regression testing. The application-level case-insensitive duplicate pre-check does not eliminate a concurrent differently-cased insert race because the database unique index is case-sensitive. Evaluate database-enforced case-insensitive uniqueness as a separate decision.
+- **Commit / branch:** `feature/phase-2-suppliers`; supplier implementation was committed before this documentation update.
+
 ## 2026-11-07 — Consolidate repository documentation
 
 - **Decision:** Repository documentation is organized under `docs/`, with the root `README.md` as the entry point and root `ARCHITECTURE.md` as the technical reference.
 - **Documentation:** Added `docs/workflows/inventory-and-stock.md` and consolidated historical phase planning context under `docs/archive/phase-based-planning.md`. Updated the development guide, architecture links, feature notes index, frontend README, and local-development cross-reference.
 - **Retirement:** Removed duplicate Docker/system-structure guides and retired the old `client/src/plan/` planning set after consolidating its durable content into `docs/workflows/`, `docs/frontend-design-guidelines.md`, and `docs/archive/`. The former Phase 2 tracker and backup files were consolidated into the historical planning archive; no application source was changed.
 - **Verification:** GitHub file inspection and documentation-link review only. No local frontend/backend build, lint, database, Docker, or runtime checks were run.
-
 
 ## 2026-11-07 — Retire phase-based planning
 
