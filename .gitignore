@@ -27,3 +27,4 @@ npm-debug.log*
 backups/
 *.dump
 *.sql
+!server/prisma/migrations/**/*.sql
