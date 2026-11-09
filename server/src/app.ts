@@ -9,6 +9,7 @@ import customerRoutes from "./features/customers/customer.routes.js";
 import deliveryRoutes from "./features/deliveries/delivery.routes.js";
 import orderRoutes from "./features/orders/order.routes.js";
 import dashboardRoutes from "./features/dashboard/dashboard.routes.js";
+import supplierRoutes from "./features/suppliers/supplier.routes.js";
 import cors from "cors";
 
 import { errorMiddleware } from "./middleware/error.middleware.js";
@@ -47,6 +48,8 @@ app.use("/api/deliveries", deliveryRoutes);
 app.use("/api/orders", orderRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use("/api/suppliers", supplierRoutes);
 
 
 
