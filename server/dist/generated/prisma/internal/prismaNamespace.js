@@ -72,6 +72,7 @@ export const ModelName = {
     RolePermission: 'RolePermission',
     User: 'User',
     Customer: 'Customer',
+    Supplier: 'Supplier',
     Product: 'Product',
     Inventory: 'Inventory',
     StockMovement: 'StockMovement',
@@ -127,6 +128,17 @@ export const CustomerScalarFieldEnum = {
     address: 'address',
     contactPerson: 'contactPerson',
     phone: 'phone',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const SupplierScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    contactPerson: 'contactPerson',
+    phone: 'phone',
+    address: 'address',
+    notes: 'notes',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'

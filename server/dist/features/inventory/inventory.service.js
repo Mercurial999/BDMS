@@ -35,8 +35,7 @@ export class InventoryService {
         };
     }
     async createInventory(data) {
-        // Business rule 1:
-        // Quantity cannot be negative.
+        // Inventory quantities must be whole numbers.
         if (!Number.isInteger(data.quantity)) {
             throw new ValidationError("Quantity must be a whole number.");
         }
@@ -49,18 +48,15 @@ export class InventoryService {
         if (data.minimumStock < 0) {
             throw new ValidationError("Minimum stock cannot be negative.");
         }
-        // Business rule 3:
         // Product must exist.
         const product = await productRepository.findById(data.productId);
         if (!product) {
             throw new NotFoundError("Product not found.");
         }
-        // Business rule 4:
         // Product must be active.
         if (product.status !== "ACTIVE") {
             throw new ConflictError("Cannot create inventory for an inactive product.");
         }
-        // Business rule 5:
         // Product can have only one inventory record.
         const existingInventory = await inventoryRepository.findByProductId(data.productId);
         if (existingInventory) {
@@ -76,9 +72,9 @@ export class InventoryService {
         if (!inventory) {
             throw new NotFoundError("Inventory not found.");
         }
-        if (data.quantity !== undefined &&
-            data.quantity < 0) {
-            throw new ValidationError("Quantity cannot be negative.");
+        if (data.minimumStock !== undefined &&
+            !Number.isInteger(data.minimumStock)) {
+            throw new ValidationError("Minimum stock must be a whole number.");
         }
         if (data.minimumStock !== undefined &&
             data.minimumStock < 0) {

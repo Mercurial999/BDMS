@@ -19,6 +19,10 @@ export const ProductStatus = {
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE'
 };
+export const SupplierStatus = {
+    ACTIVE: 'ACTIVE',
+    INACTIVE: 'INACTIVE'
+};
 export const StockMovementType = {
     IN: 'IN',
     OUT: 'OUT',
