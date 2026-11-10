@@ -32,7 +32,7 @@ For each requested feature or improvement:
 8. **Document evidence.** Update `feature-status.md`, the relevant feature note, and `development-log.md` when appropriate.
 9. **Commit and push when the user is ready.** Do not assume local changes are committed or that the local working tree is clean.
 
-Use descriptive feature/fix/docs branch names without phase prefixes. Confirm the intended base/integration branch before branching or merging; do not assume old phase-specific branching instructions remain active.
+Use descriptive feature/fix/docs branch names without phase prefixes. The official source of truth for branch creation, pull requests, merges, legacy-branch audits, and branch retirement is [Git Workflow](git-workflow.md). New working branches must start from the latest `origin/main`. Do not assume old phase-specific branching instructions remain active.
 
 Do not mark a feature as verified solely because it compiles. Record exactly what was tested and what remains unverified.
 
@@ -74,7 +74,7 @@ These rules are project decisions, not a substitute for inspecting the current i
 - `frontend-design-guidelines.md` — approved frontend visual, responsive, and interaction conventions.
 - `workflows/` — durable descriptions of important business workflows, including order-to-delivery and inventory/stock.
 - `features/` — focused feature notes when a feature needs durable requirements or implementation decisions.
-- `prompts/` — reusable prompts for feature work and repository maintenance.
+- `prompts/` — reusable prompts for feature work and repository maintenance, including the [official Git workflow prompt](prompts/git-workflow.md).\n- `git-workflow.md` — authoritative branch, pull-request, merge, legacy-history, and branch-retirement policy.
 - `archive/` — historical planning context only; never use archived phase labels or branch instructions as current guidance.
 
 The project no longer uses Phase 1, Phase 2, or numbered phase-completion gates. Choose work by business priority, defects, feature gaps, and verification needs. Use feature-oriented branch names such as `feature/suppliers`, `fix/customer-route-security`, or `docs/development-guide`. Inspect the current branch strategy before choosing a base branch.
