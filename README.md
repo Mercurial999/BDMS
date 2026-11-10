@@ -14,7 +14,7 @@ BDMS is an internal operations system for a bakery-ingredient distribution busin
 
 | Need | Read |
 |---|---|
-| Understand the project and development workflow | [Development guide](docs/development-guide.md) |
+| Understand the project and development workflow | [Development guide](docs/development-guide.md) |\n| Follow the official branch, pull-request, and merge policy | [Git workflow](docs/git-workflow.md) |
 | Understand the frontend/backend architecture | [Architecture](ARCHITECTURE.md) |
 | Follow the approved frontend visual and interaction conventions | [Frontend design guidelines](docs/frontend-design-guidelines.md) |
 | Run BDMS locally or with Docker | [Local development guide](docs/local-development.md) |
@@ -22,7 +22,7 @@ BDMS is an internal operations system for a bakery-ingredient distribution busin
 | Review proposed work and unresolved decisions | [Backlog](docs/backlog.md) |
 | Understand the documented order-to-delivery workflow | [Order-to-delivery workflow](docs/workflows/order-to-delivery.md) |
 | Understand inventory and stock-movement boundaries | [Inventory and stock workflow](docs/workflows/inventory-and-stock.md) |
-| Find reusable ChatGPT task prompts | [Prompts](docs/prompts/README.md) |
+| Find reusable ChatGPT task prompts | [Prompts](docs/prompts/README.md) |\n| Give ChatGPT the official BDMS Git rules | [Git workflow prompt](docs/prompts/git-workflow.md) |
 | Read historical planning context | [Documentation archive](docs/archive/README.md) |
 
 ## Development direction
