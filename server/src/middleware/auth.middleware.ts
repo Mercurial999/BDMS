@@ -29,10 +29,23 @@ export async function authenticate(
       );
     }
 
-    const payload = jwt.verify(
-      token,
-      authConfig.jwtSecret
-    );
+    let payload: string | jwt.JwtPayload;
+
+    try {
+      payload = jwt.verify(
+        token,
+        authConfig.jwtSecret
+      );
+    } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+        throw new AppError(
+          "Invalid or expired authentication token.",
+          401
+        );
+      }
+
+      throw error;
+    }
 
     if (
       typeof payload !== "object" ||
@@ -74,4 +87,3 @@ export async function authenticate(
     next(error);
   }
 }
-
