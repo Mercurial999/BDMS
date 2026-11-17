@@ -31,9 +31,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [permissions, setPermissions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (token) {
-      void getPermissions().then(setPermissions).catch(() => setPermissions([]));
+    let isCurrent = true;
+
+    if (!token) {
+      setPermissions([]);
+      return () => {
+        isCurrent = false;
+      };
     }
+
+    setPermissions([]);
+
+    void getPermissions()
+      .then((nextPermissions) => {
+        if (isCurrent) {
+          setPermissions(nextPermissions);
+        }
+      })
+      .catch(() => {
+        if (isCurrent) {
+          setPermissions([]);
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [token]);
 
   function login(newToken: string, newUser: AuthUser): void {
@@ -42,7 +65,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     setAuthToken(newToken);
     setUser(newUser);
-    void getPermissions().then(setPermissions).catch(() => setPermissions([]));
   }
 
   function logout(): void {
