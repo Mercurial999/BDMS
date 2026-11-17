@@ -215,9 +215,9 @@ docker compose logs -f db
 docker compose down
 ```
 
-This stops and removes the Compose containers and network. The external database volume `bdms-postgres-data` is retained.
+This stops and removes the Compose containers and network. The named database volume `bdms-postgres-data` is retained.
 
-**Database safety:** Do not use `docker compose down -v` as a routine cleanup command. Removing volumes can destroy database data.
+**Database safety:** Do not use `docker compose down -v` as a routine cleanup command. Removing volumes can destroy database data. Never remove the BDMS data volume as a troubleshooting shortcut.
 
 ## 5. Important Development Differences
 
@@ -331,6 +331,14 @@ For Docker, rebuild the frontend image when changing its build-time API URL or f
 
 For backend environment changes, restart the backend process or recreate the backend container as appropriate.
 
+### 6.6 Prisma Engine or Database Connection Errors
+
+Do not respond to a Prisma engine, migration, or connection error by immediately resetting the database or deleting Docker volumes.
+
+First identify the exact error and inspect the environment, Prisma version, generated client, database connection settings, and the command that failed. For example, a Prisma engine startup error is not proof that the database is corrupt.
+
+Resolve the underlying issue and confirm the intended database before retrying any operation that changes schema or data.
+
 ## 7. Useful Commands
 
 | Purpose | Command |
@@ -351,18 +359,77 @@ Run npm commands from the appropriate `server` or `client` directory.
 
 ## 8. Database and Data Safety
 
-Before running database migrations or other operations that change data:
+A native backend and a Docker backend can connect to different PostgreSQL databases. Even when both databases use the same database name, they may be separate instances with separate data.
 
-1. Confirm the current Git branch.
-2. Confirm which database the backend is connected to.
-3. Verify the database host, port, and name.
-4. Back up important data before schema-changing operations.
-5. Review the migration or database command before executing it.
-6. Verify the application and database after the operation.
+Before running migrations, seed commands, test scripts, or other operations that change schema or data:
 
-Use a separate test database for experiments involving schema changes or stock mutations.
+1. Confirm the current Git branch and intended task.
+2. Identify whether the backend is running natively or in Docker.
+3. Inspect the effective `DATABASE_URL` source for that process without sharing or exposing its password.
+4. Verify the database host, port, and database name.
+5. Confirm that the target is the intended development or separate test database.
+6. Review the migration, seed, or database command before executing it.
+7. Back up important data before schema-changing operations.
+8. Verify the application and database after the operation.
 
-Avoid running destructive database commands against a database containing important business data.
+For native processes connecting to the Compose PostgreSQL service, the Windows host port is `5433`. A backend container on the Compose network uses host `db` and port `5432`. Do not assume these connection settings are interchangeable.
+
+### 8.1 Safe Database Inspection
+
+These commands inspect the configured Docker database. Run them from the repository root:
+
+Inspect the named volume:
+
+```powershell
+docker volume inspect bdms-postgres-data
+```
+
+Check whether PostgreSQL is accepting connections:
+
+```powershell
+docker exec bdms-postgres pg_isready -U postgres -d bdms_db
+```
+
+Open a PostgreSQL session for inspection:
+
+```powershell
+docker exec -it bdms-postgres psql -U postgres -d bdms_db
+```
+
+At the `psql` prompt, use read-only inspection commands such as:
+
+```sql
+\conninfo
+\dt
+\q
+```
+
+The `\q` command exits the PostgreSQL console. These example commands target the Compose container named `bdms-postgres`; verify the actual container and database before using them.
+
+### 8.2 Commands and Actions That Must Not Be Used as Routine Cleanup
+
+- Do not run `docker compose down -v` as routine cleanup.
+- Do not run `docker volume rm bdms-postgres-data`.
+- Do not delete or recreate `bdms-postgres-data` to troubleshoot an application or Prisma error.
+- Do not run `prisma migrate reset` against a database containing business data or any data that must be preserved.
+- Do not run destructive SQL, drop databases, or truncate tables unless the target, impact, backup, and explicit approval have all been established.
+
+The named volume `bdms-postgres-data` stores PostgreSQL data. Removing it can permanently destroy the data held by that Docker database.
+
+### 8.3 Migration and Data-Change Checklist
+
+Before applying a migration:
+
+1. Read the Prisma schema changes and the complete SQL migration.
+2. Check whether the migration adds, changes, renames, or drops database objects or data.
+3. Confirm the database target and make a backup if the data matters.
+4. Use the repository's established migration workflow; do not substitute a reset command for a migration.
+5. Apply the migration only to the intended database.
+6. Verify migration status, the resulting schema, and application behavior.
+
+For experiments involving schema changes or stock mutations, use a separate test database. Never assume that a test database is selected just because the task is described as testing.
+
+If Prisma reports an engine startup error, an unknown process spawn error, or a connection failure, stop and diagnose it before attempting another migration or data-changing command. Do not use database reset or volume deletion as a workaround for an uninvestigated tooling error.
 
 ## 9. Related Documentation
 
