@@ -74,7 +74,8 @@ These rules are project decisions, not a substitute for inspecting the current i
 - `frontend-design-guidelines.md` — approved frontend visual, responsive, and interaction conventions.
 - `workflows/` — durable descriptions of important business workflows, including order-to-delivery and inventory/stock.
 - `features/` — focused feature notes when a feature needs durable requirements or implementation decisions.
-- `prompts/` — reusable prompts for feature work and repository maintenance, including the [official Git workflow prompt](prompts/git-workflow.md).\n- `git-workflow.md` — authoritative branch, pull-request, merge, legacy-history, and branch-retirement policy.
+- `prompts/` — reusable prompts for feature work and repository maintenance, including the [official Git workflow prompt](prompts/git-workflow.md).
+- `git-workflow.md` — authoritative branch, pull-request, merge, legacy-history, and branch-retirement policy.
 - `archive/` — historical planning context only; never use archived phase labels or branch instructions as current guidance.
 
 The project no longer uses Phase 1, Phase 2, or numbered phase-completion gates. Choose work by business priority, defects, feature gaps, and verification needs. Use feature-oriented branch names such as `feature/suppliers`, `fix/customer-route-security`, or `docs/development-guide`. Inspect the current branch strategy before choosing a base branch.
