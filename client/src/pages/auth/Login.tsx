@@ -112,7 +112,7 @@ function Login() {
               </p>
             )}
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Signing in..." : "Enter workspace"}
             </Button>
           </form>
