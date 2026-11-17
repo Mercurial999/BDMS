@@ -5,6 +5,7 @@ This folder contains reusable instructions for working on BDMS through the conne
 ## Prompts
 
 - [Feature Completion and Audit](./feature-completion-and-audit.md) — use after implementing a feature or when preparing a completed feature for review, verification, documentation, and commit.
+- [Git Workflow](./git-workflow.md) — use when creating branches, preparing pull requests, integrating changes, or auditing legacy branch history.
 - [Repository Cleanup](./repository-cleanup.md) — use when reviewing and simplifying project documentation or source-folder structure without accidentally removing important files.
 
 ## Recommended workflow
