@@ -66,10 +66,10 @@ The backend uses:
 - Development command: `npm run dev`
 - Build command: `npm run build`
 
-Open a terminal:
+From the repository root, open a terminal and enter the backend directory:
 
 ```powershell
-cd C:\Users\RENZ\Desktop\BDMS\server
+cd .\server
 npm ci
 npm run dev
 ```
@@ -80,11 +80,13 @@ Keep this terminal running.
 
 The frontend reads its API base URL from `client/.env.development`.
 
-The current configuration in the project is:
+This is a local development environment file and is ignored by Git; it is not tracked in the repository. Create or edit it locally in the `client` directory and set the value for the backend you intend to use. For example, when using the Docker-published backend:
 
 ```env
 VITE_API_URL=http://localhost:5001/api
 ```
+
+Do not commit local environment files or put secrets in frontend variables. Vite variables prefixed with `VITE_` are exposed to browser code.
 
 **Important: Choose the API URL according to which backend you are running.**
 
@@ -93,12 +95,12 @@ VITE_API_URL=http://localhost:5001/api
 | Native backend on Windows | `http://localhost:5000/api` |
 | Backend running through Docker Compose | `http://localhost:5001/api` |
 
-The current frontend environment file points to the Docker-published backend port (`5001`). If you are running the backend natively, change the value to `http://localhost:5000/api` for that development session.
+Set `VITE_API_URL` to `http://localhost:5000/api` when running the backend natively, or `http://localhost:5001/api` when using the Docker-published backend. Restart Vite after changing this value.
 
-Open another terminal:
+From the repository root, open another terminal and enter the frontend directory:
 
 ```powershell
-cd C:\Users\RENZ\Desktop\BDMS\client
+cd .\client
 npm ci
 npm run dev
 ```
@@ -121,7 +123,7 @@ If the backend is running through Docker instead, its host address is `http://lo
 
 Docker Compose starts the database, backend, and frontend containers together.
 
-The project uses the root `compose.yaml` file.
+The project uses the root `compose.yaml` file. Its PostgreSQL data volume, `bdms-postgres-data`, is declared as an external volume. Compose expects this volume to exist already; it does not create an external volume automatically. Before starting the database, verify that the intended volume exists with `docker volume inspect bdms-postgres-data`. If it is missing, stop and confirm the expected database setup before creating anything. Creating a new empty volume does not restore data from an existing database, and attaching the wrong volume can make the application appear to have lost its data.
 
 ### 4.1 Environment Configuration
 
