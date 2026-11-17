@@ -23,7 +23,8 @@ BDMS is an internal operations system for a bakery-ingredient distribution busin
 | Review proposed work and unresolved decisions | [Backlog](docs/backlog.md) |
 | Understand the documented order-to-delivery workflow | [Order-to-delivery workflow](docs/workflows/order-to-delivery.md) |
 | Understand inventory and stock-movement boundaries | [Inventory and stock workflow](docs/workflows/inventory-and-stock.md) |
-| Find reusable ChatGPT task prompts | [Prompts](docs/prompts/README.md) | Give ChatGPT the official BDMS Git rules | [Git workflow prompt](docs/prompts/git-workflow.md) |
+| Find reusable ChatGPT task prompts | [Prompts](docs/prompts/README.md) |
+| Give ChatGPT the official BDMS Git rules | [Git workflow prompt](docs/prompts/git-workflow.md) |
 | Read historical planning context | [Documentation archive](docs/archive/README.md) |
 
 ## Development direction
