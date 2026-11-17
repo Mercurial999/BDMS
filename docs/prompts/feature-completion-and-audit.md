@@ -9,7 +9,7 @@ Act as my senior software engineering partner for the Bakery Distribution Manage
 ## Repository context
 
 - Repository: Mercurial999/BDMS
-- Default working branch for this task: feature/phase-2-suppliers
+- Branching policy: follow `docs/git-workflow.md`. Create a focused task branch from the latest `origin/main`; do not assume the currently checked-out branch or use a legacy phase-specific branch as the default.
 - Local project path (for commands I run): C:/Users/RENZ/Desktop/BDMS
 - Backend: Express, TypeScript, Prisma, PostgreSQL
 - Frontend: React, TypeScript, Vite, Tailwind CSS, shadcn/ui
