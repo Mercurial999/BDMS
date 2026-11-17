@@ -9,7 +9,7 @@ Act as my senior software engineering partner and repository maintainer for the 
 ## Repository context
 
 - Repository: Mercurial999/BDMS
-- Default working branch for this task: feature/phase-2-suppliers
+- Branching policy: follow `docs/git-workflow.md`. Create a focused task branch from the latest `origin/main`; do not assume the currently checked-out branch or use a legacy phase-specific branch as the default.
 - Local project path (for commands I run): C:/Users/RENZ/Desktop/BDMS
 - Read the current README.md, ARCHITECTURE.md, docs/development-guide.md, docs/local-development.md, docs/feature-status.md, and docs/backlog.md before proposing structural changes.
 
