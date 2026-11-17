@@ -44,25 +44,11 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 
 ## Supplier backend scope and verification
 
-Implemented scope:
+Supplier master-data backend is implemented: required supplier name, optional contact details/notes, ACTIVE/INACTIVE status, protected CRUD/status endpoints, validation, and soft-deactivation/reactivation. Manual API verification on the separate `bdms_restore_test` database and the backend TypeScript build passed on 2026-11-09.
 
-- Supplier fields: required name; optional contact person, phone, address, and notes; ACTIVE/INACTIVE status; timestamps.
-- List suppliers, optionally filter by status, retrieve by ID, create, update, and deactivate.
-- Protected routes use authentication and the corresponding `suppliers.read/create/update/delete` permissions.
-- Input validation trims text and rejects blank names.
-- Service-level case-insensitive duplicate-name check.
-- Deactivation is soft: the supplier record is retained with INACTIVE status. Reactivation is supported through update.
+The supplier frontend and automated tests remain outstanding. Purchase receiving and inventory/stock posting are separate features and are not part of supplier master data.
 
-Manual API verification on the separate Docker test database `bdms_restore_test` passed for: list; create; get by ID; ACTIVE filtering; case-insensitive duplicate rejection (409); blank-name validation (400); update; deactivate/reactivate; INACTIVE filtering; soft-deactivation persistence; repeated deactivation rejection (409); and unauthenticated access rejection (401). The backend `npm run build` / TypeScript compilation passed on 2026-11-09.
-
-Not yet verified or implemented:
-
-- Supplier frontend page, forms, navigation, and API integration.
-- Automated unit/integration tests and full regression testing.
-- Receiving, purchase records, inventory quantity changes, stock movements, FIFO allocation, or delivery changes. These are explicitly outside this supplier master-data feature.
-
-Known technical limitation: the service checks names case-insensitively, while the database's ordinary unique index is case-sensitive. Concurrent requests using different letter casing could race past the application pre-check. A database-level case-insensitive unique constraint is not included and requires a separate design decision.
-
+For the detailed implementation record, manual verification scenarios, and known case-insensitive uniqueness race limitation, see [the development log](development-log.md).
 ## Current review findings
 
 - Verify authentication and authorization on Customer and Delivery APIs.
@@ -72,19 +58,9 @@ Known technical limitation: the service checks names case-insensitively, while t
 - Review whole-number quantity enforcement at the database layer; inspected Prisma quantity columns have used Decimal.
 - Delivery completion uses a transaction and corresponding OUT movements; re-test failure and retry paths in a safe database.
 
-## Recommended follow-up
+## Follow-up work
 
-1. Build the Suppliers frontend and connect it to the protected API.
-2. Add automated tests for supplier validation, permissions, duplicate handling, updates, and deactivation.
-3. Decide whether to add database-enforced case-insensitive uniqueness for supplier names.
-4. Verify Customer and Delivery API security.
-5. Decide the required Orders frontend workflow.
-6. Reconcile inventory balances and stock-movement history; verify all stock-changing paths.
-7. Run the core staff workflow: order → delivery → inventory deduction → sales/reports.
-8. Plan Purchase Receiving as a separate feature with explicit stock-posting and reversal rules.
-
-This is a suggested order, not a rigid sequence. Priorities may change with business needs.
-
+The detailed, prioritized list of technical follow-ups and candidate features is maintained in [the backlog](backlog.md). Keep this status document focused on the current implementation and verification state; do not duplicate the backlog here.
 ## Verification record
 
 For each status change, record what changed, which workflow and scenarios were tested, exact commands and outcomes, what remains untested, and the related commit or pull request. Do not mark a feature verified solely because it compiles.
