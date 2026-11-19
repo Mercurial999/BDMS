@@ -1,5 +1,12 @@
 # BDMS Development Log
 
+## 2026-11-19 — Audit documentation against main
+
+- **Scope:** Reviewed the documentation branch against `main` commit `f239ed9`; no application source or database files were changed.
+- **Corrections:** Clarified the main-baseline feature status, backend API security gaps, inventory/stock-movement integrity limitations, whole-number validation mismatch, ADJUSTMENT behavior, and the distinction between Supplier work on a separate branch and features integrated into main.
+- **Verification:** GitHub source and documentation inspection only. No local frontend/backend build, lint, automated test, migration, database, Docker, or end-to-end checks were run for this documentation audit.
+- **Branch:** `docs/repository-documentation`. The changes remain subject to local review and a documentation pull request.
+
 ## 2026-11-09 — Implement and verify Suppliers backend
 
 - **Feature / area:** Supplier master data API.
@@ -8,7 +15,7 @@
 - **Database safety:** Manual API checks used the separate Docker test database `bdms_restore_test`; no production database was used for this verification.
 - **Verification:** Manual API checks passed for list, create, get by ID, status filtering, case-insensitive duplicate rejection (409), blank-name validation (400), update, deactivate/reactivate, soft-deactivation persistence, repeated deactivation rejection (409), and unauthenticated request rejection (401). Backend `npm run build` completed successfully; TypeScript reported no errors.
 - **Remaining work:** Suppliers frontend page and API integration; automated tests; full regression testing. The application-level case-insensitive duplicate pre-check does not eliminate a concurrent differently-cased insert race because the database unique index is case-sensitive. Evaluate database-enforced case-insensitive uniqueness as a separate decision.
-- **Commit / branch:** `feature/phase-2-suppliers`; supplier implementation was committed before this documentation update.
+- **Commit / branch:** `feature/phase-2-suppliers`; this is a historical record of separate-branch work and does not mean the Supplier feature is present in `main`.
 
 ## 2026-11-07 — Consolidate repository documentation
 
