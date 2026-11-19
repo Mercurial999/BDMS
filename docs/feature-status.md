@@ -24,7 +24,7 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 
 | Feature / area | Current status | Evidence and next action |
 |---|---|---|
-| Authentication | Working â€” needs ongoing verification | Login/JWT and active-account checks exist. Recheck token/session behavior and API protection when changing access control. |
+| Authentication | Needs improvement | Login/JWT and active-account checks exist, but the reviewed API route coverage is incomplete: Customers, Orders, Deliveries, Sales, Reports, and Dashboard do not apply backend authentication middleware. |
 | Users / Roles / Permissions | Needs verification | Backend and frontend modules exist. Verify the one-Admin/staff rules and endpoint-by-endpoint permission coverage. |
 | Products | Working â€” needs ongoing verification | Product UI and backend feature exist. Preserve separation between product details and stock quantity. |
 | Inventory | Needs improvement | `PUT /api/inventory/:id` can change quantity without a matching movement. Inventory and movement quantities use Decimal columns and the reviewed Zod schemas accept fractional values. |
