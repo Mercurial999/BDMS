@@ -6,11 +6,13 @@ This is a flexible list of proposed work, technical follow-ups, and unresolved b
 
 | Priority | Item | Reason / acceptance direction |
 |---|---|---|
+| Critical | Backend API authentication and authorization | Add and verify authentication plus least-privilege permissions for Customer, Orders, Deliveries, Sales, Reports, and Dashboard routes. Test unauthenticated (401), authenticated-but-forbidden (403), and authorized requests for every endpoint. Do not rely on frontend route guards. |
+| High | Remove or constrain direct inventory quantity updates | Ensure ordinary stock changes cannot bypass the Stock Movement ledger. Define a safe adjustment/count workflow and preserve atomic balance-to-ledger updates. |
+| High | Enforce whole-number stock quantities | Align Inventory and Stock Movement API validation and database constraints with the confirmed whole-number business rule; inspect existing data and migration impact first. |
+| High | Clarify ADJUSTMENT semantics | The reviewed implementation sets an absolute counted balance, not a delta. Confirm the intended user input and audit behavior before changing the API contract. |
 | High | Suppliers frontend | Build supplier list/detail or edit experience, create/update forms, status filtering, activate/deactivate actions, navigation, loading/error states, and permission-aware controls. Connect to the existing protected Suppliers API. |
 | High | Supplier automated tests | Add automated coverage for validation, authorization, duplicate handling, updates, status filtering, and soft-deactivation. Manual API checks and a successful TypeScript build are not substitutes for automated tests. |
 | Medium | Supplier name uniqueness | Decide whether to add database-enforced case-insensitive uniqueness. Current service pre-check is case-insensitive, but the database unique index is case-sensitive and does not prevent a concurrent differently-cased insert race. |
-| High | Review Customer API security | Confirm authentication and intended permissions on every customer endpoint; test unauthenticated, forbidden, and authorized requests. |
-| High | Review Delivery API security | Confirm authentication and intended permissions on every delivery endpoint; test access and stock-changing actions. |
 | High | Orders frontend workflow | Decide whether staff need a dedicated Orders page; if yes, connect it to the existing Orders API without duplicating delivery logic. |
 | High | Inventory/ledger reconciliation | Confirm every stock-changing path updates inventory and movement history consistently and atomically. |
 | High | Core workflow regression | Test order → delivery → stock deduction → sales/reporting, including insufficient stock and repeated completion. |
