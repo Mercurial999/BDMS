@@ -13,6 +13,7 @@ A feature that is usable today may still need refinement, security review, testi
 - Frontend and backend folder structures do not need to mirror each other. They serve different responsibilities.
 - Keep API communication on the existing native-fetch helper. Do not add Axios or duplicate token/header handling without an explicit decision.
 - Business rules, authorization, stock calculations, and state transitions belong on the backend—not only in the UI.
+- A frontend route guard or a bearer token attached by the client does not secure an API route unless the backend route applies authentication and authorization middleware. Check every route group; the reviewed `main` baseline has known gaps in Customers, Orders, Deliveries, Sales, Reports, and Dashboard.
 - Keep database schema changes in Prisma schema/migrations and regenerate the Prisma client through the established project workflow.
 - Keep secrets in ignored environment files. Never commit passwords, JWT secrets, database credentials, tokens, or real customer-sensitive data.
 
@@ -47,7 +48,7 @@ Use these labels consistently in `feature-status.md`:
 - **Planned:** not yet implemented or not yet started.
 - **Blocked / decision needed:** work depends on a business or technical decision.
 
-Statuses describe the evidence available at the last review. Recheck the current branch and local changes before relying on them.
+Statuses describe the evidence available at the last review and must identify the source branch/commit. Separate-branch implementation is not part of `main` until it is reviewed and integrated. Recheck the current branch and local changes before relying on them.
 
 ## 5. Business rules to preserve
 
@@ -57,6 +58,9 @@ Statuses describe the evidence available at the last review. Recheck the current
 - Operational product quantities are whole numbers. Validate this consistently at API and database boundaries where applicable.
 - Creating or confirming an order does not deduct inventory.
 - Completing a delivery is the stock-deduction point in the documented workflow. Inventory changes and matching stock movements must be atomic and protected against duplicate completion.
+- Avoid direct inventory quantity updates that bypass the stock-movement ledger. In the reviewed `main` baseline, the inventory update endpoint can change quantity without creating a movement.
+- Whole-number quantities are a business rule, but the reviewed Inventory and Stock Movement database columns are Decimal and their Zod schemas accept fractional values. Do not assume the rule is fully enforced by the current implementation.
+- In the reviewed `main` baseline, `ADJUSTMENT` sets the supplied absolute balance; it is not a signed delta.
 - Sales are derived from completed deliveries in the current design. Do not create a second manual sales-entry workflow without explicit approval.
 - Reports draw from Sales, Products, Inventory, Stock Movements, Customers, and Deliveries.
 - Delivery Receipt generation/printing was previously deferred. Reconfirm business requirements before starting it.
