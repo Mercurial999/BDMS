@@ -12,7 +12,7 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 
 ## Status definitions
 
-- **Working â€” needs ongoing verification:** implementation is present and the described checks have passed, but complete release testing is not implied.
+- **Working — needs ongoing verification:** implementation is present and the described checks have passed, but complete release testing is not implied.
 - **In progress:** active implementation or integration work is underway.
 - **Needs improvement:** the feature exists but has known gaps or planned refinements.
 - **Needs verification:** implementation or historical evidence exists, but current behavior has not been freshly verified.
@@ -26,7 +26,7 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 |---|---|---|
 | Authentication | Needs improvement | Login/JWT and active-account checks exist, but the reviewed API route coverage is incomplete: Customers, Orders, Deliveries, Sales, Reports, and Dashboard do not apply backend authentication middleware. |
 | Users / Roles / Permissions | Needs verification | Backend and frontend modules exist. Verify the one-Admin/staff rules and endpoint-by-endpoint permission coverage. |
-| Products | Working â€” needs ongoing verification | Product UI and backend feature exist. Preserve separation between product details and stock quantity. |
+| Products | Working — needs ongoing verification | Product UI and backend feature exist. Preserve separation between product details and stock quantity. |
 | Inventory | Needs improvement | `PUT /api/inventory/:id` can change quantity without a matching movement. Inventory and movement quantities use Decimal columns and the reviewed Zod schemas accept fractional values. |
 | Stock Movements | Needs improvement | Movement creation updates balance and ledger transactionally, but fractional quantities pass validation and `ADJUSTMENT` sets an absolute balance rather than applying a delta. |
 | Customers | Needs improvement | Customer UI/API exist. In this main baseline, the Customer route group does not apply backend authentication or permission middleware. |
