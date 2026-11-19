@@ -10,9 +10,9 @@ This is a flexible list of proposed work, technical follow-ups, and unresolved b
 | High | Remove or constrain direct inventory quantity updates | Ensure ordinary stock changes cannot bypass the Stock Movement ledger. Define a safe adjustment/count workflow and preserve atomic balance-to-ledger updates. |
 | High | Enforce whole-number stock quantities | Align Inventory and Stock Movement API validation and database constraints with the confirmed whole-number business rule; inspect existing data and migration impact first. |
 | High | Clarify ADJUSTMENT semantics | The reviewed implementation sets an absolute counted balance, not a delta. Confirm the intended user input and audit behavior before changing the API contract. |
-| High | Suppliers frontend | Build supplier list/detail or edit experience, create/update forms, status filtering, activate/deactivate actions, navigation, loading/error states, and permission-aware controls. Connect to the existing protected Suppliers API. |
+| High | Suppliers frontend and integration | After the separate Supplier backend work is reviewed and integrated into `main`, build list/edit forms, status filtering, activate/deactivate actions, navigation, loading/error states, and permission-aware controls against the integrated API. |
 | High | Supplier automated tests | Add automated coverage for validation, authorization, duplicate handling, updates, status filtering, and soft-deactivation. Manual API checks and a successful TypeScript build are not substitutes for automated tests. |
-| Medium | Supplier name uniqueness | Decide whether to add database-enforced case-insensitive uniqueness. Current service pre-check is case-insensitive, but the database unique index is case-sensitive and does not prevent a concurrent differently-cased insert race. |
+| Medium | Supplier name uniqueness | In the separately developed Supplier implementation, the service pre-check is case-insensitive but the database unique index is case-sensitive, leaving a concurrent differently-cased insert race. Reassess the implementation and decide on database-enforced case-insensitive uniqueness during integration review. |
 | High | Orders frontend workflow | Decide whether staff need a dedicated Orders page; if yes, connect it to the existing Orders API without duplicating delivery logic. |
 | High | Inventory/ledger reconciliation | Confirm every stock-changing path updates inventory and movement history consistently and atomically. |
 | High | Core workflow regression | Test order → delivery → stock deduction → sales/reporting, including insufficient stock and repeated completion. |
@@ -23,7 +23,7 @@ This is a flexible list of proposed work, technical follow-ups, and unresolved b
 
 | Feature | Direction | Decisions to confirm |
 |---|---|---|
-| Suppliers master data — backend | Implemented; manual API verification and backend build passed on 2026-11-09 | Frontend integration and automated tests remain. Decide on database-level case-insensitive uniqueness separately. |
+| Suppliers master data — backend | Implemented on a separate branch; not present in the reviewed `main` baseline | Review and integrate the schema, migration, API, permissions, and tests through a focused pull request. Recorded manual API verification and backend build results are branch-specific; frontend integration and automated tests remain. |
 | Purchase Receiving / Stock-In | Planned | Supplier requirement, source reference, partial receiving, unit cost, posting/cancellation rules, and exactly-once behavior. This is separate from supplier master data. |
 | Stock Adjustments | Needs improvement | Counted balance vs. delta, reasons, permissions, negative-stock policy, and audit requirements. |
 | Customer Returns | Planned | Return eligibility, item condition/disposition, restocking rules, and sales-report treatment. |
