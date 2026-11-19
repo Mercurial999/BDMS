@@ -227,7 +227,7 @@ new inventory quantity = current quantity - delivery quantity
 
 The inventory record is updated inside the same transaction.
 
-The delivery module uses centralized inventory logic and does not perform an unsafe client-side deduction.
+The backend delivery service updates the inventory balance and creates the matching stock movement inside the same transaction; the frontend does not deduct stock independently.
 
 ## Step 11: Backend Creates A Stock Movement
 
