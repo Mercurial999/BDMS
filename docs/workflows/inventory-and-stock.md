@@ -75,8 +75,6 @@ Decide whether initialization should be automatic or an explicit staff action. D
 In the reviewed `main` baseline, the Stock Movement service treats an `ADJUSTMENT` quantity as the new counted balance (an absolute replacement), not as a signed delta. Do not describe or use it as a delta unless the implementation and business rule are deliberately changed.
 
 Before changing adjustment behavior, confirm:
-
-Before implementing adjustments, confirm:
 - Whether staff enter a counted final quantity or a positive/negative delta.
 - Which roles may create or approve adjustments.
 - Required reasons and references.
