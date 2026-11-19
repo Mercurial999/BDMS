@@ -13,9 +13,10 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 ## Status definitions
 
 - **Working â€” needs ongoing verification:** implementation is present and the described checks have passed, but complete release testing is not implied.
-- **Implemented on a separate branch — not in main:** work exists outside the reviewed main baseline and must be reviewed/integrated before it is described as part of main.
 - **In progress:** active implementation or integration work is underway.
-- **Needs improvement / verification:** the feature exists but has known gaps or has not received fresh end-to-end verification.
+- **Needs improvement:** the feature exists but has known gaps or planned refinements.
+- **Needs verification:** implementation or historical evidence exists, but current behavior has not been freshly verified.
+- **Not in main baseline:** implementation may exist on a separate branch but is not part of the reviewed main commit; review and integrate it before describing it as available on main.
 - **Planned:** not yet implemented or not yet started.
 - **Blocked / decision needed:** work depends on a business or technical decision.
 
@@ -48,6 +49,7 @@ Supplier master-data implementation and manual API verification were recorded on
 **This work is not present in the reviewed `main` baseline.** Do not describe Suppliers as implemented on main until the relevant branch changes are reviewed, integrated through a pull request, and verified against the resulting main commit. The supplier frontend and automated tests were still outstanding in the recorded implementation notes. Purchase receiving and inventory posting are separate features.
 
 The recorded supplier-name pre-check was case-insensitive, while the database unique index was case-sensitive; concurrent differently-cased inserts therefore remained a known race risk. See the [development log](development-log.md).
+
 ## Current main-baseline findings
 
 - The Customer, Orders, Deliveries, Sales, Reports, and Dashboard route groups do not apply backend `authenticate` or `authorize` middleware in the reviewed baseline. Frontend route guards and a client-sent bearer token do not secure these API endpoints.
@@ -61,6 +63,7 @@ The recorded supplier-name pre-check was case-insensitive, while the database un
 ## Follow-up work
 
 The detailed, prioritized list of technical follow-ups and candidate features is maintained in [the backlog](backlog.md). Keep this status document focused on the current implementation and verification state; do not duplicate the backlog here.
+
 ## Scope and verification record
 
 The source baseline for this snapshot is `main` commit `f239ed9` (2026-11-17). The findings above come from source inspection and previously recorded, separately scoped manual test evidence; they are not a claim that the entire application was executed or regression-tested on this commit. Local frontend/backend builds, automated tests, full API security tests, and end-to-end regression were not run as part of this documentation audit.
