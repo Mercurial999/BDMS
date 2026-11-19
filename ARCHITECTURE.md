@@ -28,24 +28,24 @@ The backend's HTTP entry point is `server/src/index.ts`, which imports `server/s
 
 ### Root
 
-- `client/` â€” frontend application.
-- `server/` â€” API, database schema/migrations, seed logic, and generated Prisma client/build output.
-- Root-level Docker Compose and environment/configuration files â€” local multi-service runtime configuration. Keep secrets in ignored environment files; never commit credentials.
+- `client/` — frontend application.
+- `server/` — API, database schema/migrations, seed logic, and generated Prisma client/build output.
+- Root-level Docker Compose and environment/configuration files — local multi-service runtime configuration. Keep secrets in ignored environment files; never commit credentials.
 
 ### Frontend: `client/`
 
-- `src/main.tsx` â€” React root; imports global CSS and wraps the app in `AuthProvider`.
-- `src/App.tsx` â€” small app entry component that renders `AppRoutes`.
-- `src/routes/` â€” route definitions and page routing (including `AppRoutes`).
-- `src/pages/` â€” route-level screens.
-- `src/components/` â€” reusable UI and domain components.
-- `src/layouts/` â€” shared page/layout shells.
-- `src/context/` â€” React contexts/providers, including authentication state.
-- `src/services/` â€” domain-specific API calls, such as authentication and feature services.
-- `src/lib/` â€” shared helpers. `src/lib/api.ts` defines `apiRequest<T>()`; it reads `VITE_API_URL`, adds JSON headers and a bearer token when present, parses the JSON response, and throws an error for non-2xx responses.
-- `src/types/` â€” shared TypeScript types.
-- `src/assets/` â€” static assets.
-- `src/index.css` â€” global styles.
+- `src/main.tsx` — React root; imports global CSS and wraps the app in `AuthProvider`.
+- `src/App.tsx` — small app entry component that renders `AppRoutes`.
+- `src/routes/` — route definitions and page routing (including `AppRoutes`).
+- `src/pages/` — route-level screens.
+- `src/components/` — reusable UI and domain components.
+- `src/layouts/` — shared page/layout shells.
+- `src/context/` — React contexts/providers, including authentication state.
+- `src/services/` — domain-specific API calls, such as authentication and feature services.
+- `src/lib/` — shared helpers. `src/lib/api.ts` defines `apiRequest<T>()`; it reads `VITE_API_URL`, adds JSON headers and a bearer token when present, parses the JSON response, and throws an error for non-2xx responses.
+- `src/types/` — shared TypeScript types.
+- `src/assets/` — static assets.
+- `src/index.css` — global styles.
 - Project documentation lives under repository-root `docs/`; it is not frontend runtime code. See `docs/development-guide.md` for the current feature-based workflow.
 
 **Frontend request flow**
@@ -60,19 +60,19 @@ Keep HTTP details centralized; do not introduce a second HTTP client or duplicat
 
 ### Backend: `server/`
 
-- `src/index.ts` â€” process entry point and listener.
-- `src/app.ts` â€” creates the Express app, configures CORS and JSON parsing, mounts API routers, and registers the error middleware.
-- `src/routes/index.ts` â€” mounts grouped routes for users, roles, authentication, permissions, sales, and reports under `/api`.
-- `src/features/<feature>/` â€” feature-oriented modules. Common files include routes, controller, service, repository, validation, and types. A feature may omit a layer when it is not needed; follow the neighboring implementation rather than creating empty layers.
-- `src/middleware/` â€” cross-cutting request middleware such as authentication, permission checks, request validation, query validation, and error handling.
-- `src/config/` â€” configuration such as JWT settings.
-- `src/database/` â€” Prisma/database client setup.
-- `src/shared/` â€” shared errors and other cross-feature primitives.
-- `prisma/schema.prisma` â€” relational schema and enums.
-- `prisma/migrations/` â€” versioned database changes.
-- `prisma/seed.ts` â€” initial/reference data such as roles and permissions.
-- `src/generated/prisma/` â€” generated Prisma client output.
-- `dist/` â€” compiled JavaScript output produced by the TypeScript build. Prefer changing `src/` and rebuilding instead of editing generated output manually. Some compiled output may already be tracked in repository history; do not assume generated files are untracked or remove them wholesale. Review generated-file diffs separately and follow the current integration scope.
+- `src/index.ts` — process entry point and listener.
+- `src/app.ts` — creates the Express app, configures CORS and JSON parsing, mounts API routers, and registers the error middleware.
+- `src/routes/index.ts` — mounts grouped routes for users, roles, authentication, permissions, sales, and reports under `/api`.
+- `src/features/<feature>/` — feature-oriented modules. Common files include routes, controller, service, repository, validation, and types. A feature may omit a layer when it is not needed; follow the neighboring implementation rather than creating empty layers.
+- `src/middleware/` — cross-cutting request middleware such as authentication, permission checks, request validation, query validation, and error handling.
+- `src/config/` — configuration such as JWT settings.
+- `src/database/` — Prisma/database client setup.
+- `src/shared/` — shared errors and other cross-feature primitives.
+- `prisma/schema.prisma` — relational schema and enums.
+- `prisma/migrations/` — versioned database changes.
+- `prisma/seed.ts` — initial/reference data such as roles and permissions.
+- `src/generated/prisma/` — generated Prisma client output.
+- `dist/` — compiled JavaScript output produced by the TypeScript build. Prefer changing `src/` and rebuilding instead of editing generated output manually. Some compiled output may already be tracked in repository history; do not assume generated files are untracked or remove them wholesale. Review generated-file diffs separately and follow the current integration scope.
 
 **Backend request flow**
 
@@ -92,7 +92,7 @@ Not every endpoint necessarily has every middleware layer. Confirm route protect
 
 The preferred dependency direction is:
 
-`route â†’ middleware/validation â†’ controller â†’ service â†’ repository â†’ Prisma/database`
+`route → middleware/validation → controller → service → repository → Prisma/database`
 
 - **Routes** declare HTTP methods, URL paths, middleware order, and controller handlers.
 - **Controllers** should stay focused on HTTP inputs/outputs.
@@ -155,10 +155,10 @@ The feature-status tracker and backlog record known inventory integrity risks an
 
 Run from `client/`:
 
-- `npm run dev` â€” Vite development server.
-- `npm run build` â€” TypeScript project build followed by Vite production build.
-- `npm run lint` â€” ESLint.
-- `npm run preview` â€” preview the production build.
+- `npm run dev` — Vite development server.
+- `npm run build` — TypeScript project build followed by Vite production build.
+- `npm run lint` — ESLint.
+- `npm run preview` — preview the production build.
 
 The frontend requires `VITE_API_URL` to be configured; `src/lib/api.ts` throws if it is missing.
 
@@ -166,10 +166,10 @@ The frontend requires `VITE_API_URL` to be configured; `src/lib/api.ts` throws i
 
 Run from `server/`:
 
-- `npm run dev` â€” run `src/index.ts` with `tsx watch`.
-- `npm run build` â€” compile TypeScript with `tsc`.
-- `npm start` â€” run `dist/index.js`.
-- `npm run prisma:seed` â€” execute the Prisma seed script with `tsx`.
+- `npm run dev` — run `src/index.ts` with `tsx watch`.
+- `npm run build` — compile TypeScript with `tsc`.
+- `npm start` — run `dist/index.js`.
+- `npm run prisma:seed` — execute the Prisma seed script with `tsx`.
 
 The backend uses Prisma's generated client under `src/generated/prisma`; regenerate it using the repository's configured Prisma workflow after schema changes.
 
