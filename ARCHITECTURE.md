@@ -72,7 +72,7 @@ Keep HTTP details centralized; do not introduce a second HTTP client or duplicat
 - `prisma/migrations/` â€” versioned database changes.
 - `prisma/seed.ts` â€” initial/reference data such as roles and permissions.
 - `src/generated/prisma/` â€” generated Prisma client output.
-- `dist/` â€” compiled JavaScript output produced by the TypeScript build. Prefer changing `src/` and rebuilding instead of editing generated output manually.
+- `dist/` â€” compiled JavaScript output produced by the TypeScript build. Prefer changing `src/` and rebuilding instead of editing generated output manually. Some compiled output may already be tracked in repository history; do not assume generated files are untracked or remove them wholesale. Review generated-file diffs separately and follow the current integration scope.
 
 **Backend request flow**
 
@@ -145,6 +145,7 @@ The feature-status tracker and backlog record known inventory integrity risks an
 - The authentication middleware verifies the token, checks the user still exists, rejects inactive accounts, and attaches user identity/role information to the request.
 - The client stores the token under `bdms_token` and asks the backend for the current user's permission names.
 - Backend authorization must be enforced on the API. Hiding a button or route in the frontend is not sufficient protection.
+- In the reviewed `main` baseline, the Customers, Orders, Deliveries, Sales, Reports, and Dashboard route groups do not apply `authenticate` or `authorize` middleware. See Section 9; this is a known security gap, not merely a general reminder.
 
 **Security review reminder:** inspect every write endpoint and sensitive read/report endpoint for both authentication and the intended permission. Test unauthenticated (401), authenticated-but-forbidden (403), and authorized success cases. The exact current middleware coverage can change as features and fixes are merged.
 
@@ -205,6 +206,7 @@ The following findings describe the reviewed `origin/main` baseline at commit `f
 ### Inventory and stock-movement integrity
 
 - `PUT /api/inventory/:id` can update an inventory quantity directly without creating a corresponding Stock Movement record. This can make the inventory balance and movement history inconsistent.
+- The generic Stock Movement creation endpoint supports `IN / PURCHASE` and updates the balance and movement in one transaction, but it is not a supplier-linked Purchase Receiving workflow.
 - Stock Movement creation updates the inventory balance and creates the movement in one database transaction. However, `ADJUSTMENT` currently treats the supplied quantity as the replacement balance (an absolute count), not as a signed change or delta.
 - Inventory and Stock Movement quantities use Decimal database columns. Their reviewed Zod schemas validate numeric ranges but do not require integers, so fractional quantities can pass validation despite the whole-number business rule. Order and Delivery item quantities use integers.
 
