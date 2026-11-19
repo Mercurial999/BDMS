@@ -99,7 +99,7 @@ Do not delete `phase-2-development`, `feature/phase-2-suppliers`, or any other e
 - Review migration SQL and the Prisma schema before applying migrations.
 - Never run destructive reset or volume-removal commands against a database containing data that must be retained.
 - Keep credentials and local environment files out of Git.
-- Do not commit generated build output such as `server/dist/` unless the project explicitly changes that policy.
+- Do not manually edit or newly add generated build output such as `server/dist/`. Check whether generated files are tracked on the current branch with `git ls-files server/dist`; historical branches may differ. If a build changes tracked generated files, inspect the diff and confirm whether they belong in the task before committing. Do not untrack or delete generated files wholesale without a separate review.
 - Review `.gitignore` and the full Git diff before committing.
 
 See [Local Development](local-development.md) for database and Docker safety procedures.
