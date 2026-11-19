@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This document describes the current BDMS workflow from creating an order to completing a delivery.
+This document describes the workflow implemented in the reviewed `main` baseline at commit `f239ed9`. Recheck the current source before relying on these details after later changes.
+
+> **Security limitation:** The frontend login flow stores and sends a bearer token, but the Customer, Orders, and Deliveries route groups in this `main` baseline do not apply backend authentication or permission middleware. The Sales, Reports, and Dashboard route groups have the same gap. A staff-only frontend route or a client-sent token does not secure an API endpoint. Treat backend route protection as a high-priority security gap; do not infer that the steps below are securely enforced by the API.
 
 The workflow connects:
 
@@ -80,7 +82,7 @@ The staff selects:
 - Positive whole-number quantity
 - Optional delivery notes
 
-An earlier inspection recorded that the frontend delivery form supported one product item per new delivery while the backend order model supported multiple items. Treat that as a historical observation, not a statement about the current UI; inspect the latest frontend and backend before planning multi-item workflow changes.
+The reviewed frontend Delivery flow currently supports one product line when creating a delivery. The backend order and delivery models support multiple items. Treat this as a current UI limitation for the reviewed baseline, not a backend data-model limitation.
 
 ## Step 4: Frontend Creates The Order
 
@@ -304,7 +306,7 @@ A completed delivery cannot be completed again.
 
 ## Current Frontend Sequence
 
-The current delivery page performs this sequence when the staff submits the form:
+The reviewed frontend delivery flow performs this sequence when staff submit the form:
 
 ```text
 createOrder()
@@ -336,3 +338,4 @@ Before considering a delivery successful, verify:
 - Inventory quantity decreases by the delivery quantity.
 - A stock movement with type `OUT` is created.
 - Dashboard and inventory data refresh correctly.
+- Confirm backend authentication and intended permissions are enforced on every Customer, Order, Delivery, Sales, Reports, and Dashboard endpoint; frontend route guards alone are insufficient.
