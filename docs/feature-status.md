@@ -1,11 +1,10 @@
 ﻿# BDMS Feature Status
 
 **Repository:** `Mercurial999/BDMS`
-**Branch:** `feature/phase-2-suppliers`
-**Status updated:** 2026-11-09
-**Source implementation reviewed:** supplier backend changes committed on this branch
+**Source baseline:** `main` at commit `f239ed9`
+**Status updated:** 2026-11-19
 
-> This is an evidence-based snapshot, not a live dashboard. A feature is not considered fully complete merely because its source compiles. Verification statements below distinguish backend checks from frontend and end-to-end work.
+> This is an evidence-based snapshot of the reviewed `main` baseline, not a live dashboard. It does not include unmerged work from feature branches or local working trees. Verification statements distinguish source inspection, manual checks, builds, automated tests, and end-to-end testing.
 
 ## Official development status
 
@@ -14,7 +13,7 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 ## Status definitions
 
 - **Working â€” needs ongoing verification:** implementation is present and the described checks have passed, but complete release testing is not implied.
-- **Backend implemented â€” frontend pending:** backend implementation and the stated backend checks are complete; user-facing frontend integration remains.
+- **Implemented on a separate branch — not in main:** work exists outside the reviewed main baseline and must be reviewed/integrated before it is described as part of main.
 - **In progress:** active implementation or integration work is underway.
 - **Needs improvement / verification:** the feature exists but has known gaps or has not received fresh end-to-end verification.
 - **Planned:** not yet implemented or not yet started.
@@ -27,40 +26,43 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 | Authentication | Working â€” needs ongoing verification | Login/JWT and active-account checks exist. Recheck token/session behavior and API protection when changing access control. |
 | Users / Roles / Permissions | Needs verification | Backend and frontend modules exist. Verify the one-Admin/staff rules and endpoint-by-endpoint permission coverage. |
 | Products | Working â€” needs ongoing verification | Product UI and backend feature exist. Preserve separation between product details and stock quantity. |
-| Inventory | Needs improvement | Inventory module exists. Review database-level whole-number enforcement and every stock-changing path. |
-| Stock Movements | Needs verification | Verify IN/OUT/ADJUSTMENT behavior, authorization, and balance-to-ledger reconciliation. |
-| Customers | Needs improvement | Customer UI/API exist. Verify backend authentication and permissions on every route. |
-| Orders | Needs improvement | Backend Orders API exists, but the frontend Orders page/route was not present in the prior source review. Decide and implement the required staff workflow if still needed. |
-| Deliveries | Needs improvement | UI/API and transactional completion logic exist. Verify route protection and re-test insufficient stock, duplicate completion, and rollback. |
-| Sales | Working â€” needs ongoing verification | Sales derives from completed deliveries in the current design. Reconcile totals against delivery records. |
-| Dashboard | Needs verification | Reconcile displayed metrics and test loading, empty, and error states. |
-| Reports | Needs verification | Reconcile outputs against source records and verify report permissions/exports. |
-| Suppliers â€” backend | **Backend implemented â€” frontend pending** | Supplier schema/migration, protected CRUD/status API, validation, and soft-deactivation are implemented. Manual API checks passed on the separate `bdms_restore_test` database; backend TypeScript build passed on 2026-11-09. Frontend UI/integration and automated tests remain. |
+| Inventory | Needs improvement | `PUT /api/inventory/:id` can change quantity without a matching movement. Inventory and movement quantities use Decimal columns and the reviewed Zod schemas accept fractional values. |
+| Stock Movements | Needs improvement | Movement creation updates balance and ledger transactionally, but fractional quantities pass validation and `ADJUSTMENT` sets an absolute balance rather than applying a delta. |
+| Customers | Needs improvement | Customer UI/API exist. In this main baseline, the Customer route group does not apply backend authentication or permission middleware. |
+| Orders | Needs improvement | Backend Orders API exists, but no Orders frontend page/route was found in the reviewed frontend route tree. The Orders route group also lacks backend authentication and permission middleware. |
+| Deliveries | Needs improvement | UI/API and transactional completion logic exist. The Delivery route group lacks backend authentication and permission middleware; re-test insufficient stock, duplicate completion, and rollback. |
+| Sales | Needs improvement | Sales are derived from completed deliveries, but the Sales route group lacks backend authentication and permission middleware. Reconcile totals against delivery records. |
+| Dashboard | Needs improvement | The Dashboard route group lacks backend authentication and permission middleware. Reconcile metrics and test loading, empty, and error states. |
+| Reports | Needs improvement | The Reports route group lacks backend authentication and permission middleware. Reconcile outputs against source records and verify filters/exports. |
+| Suppliers | Not in main baseline | The reviewed Prisma schema and route composition do not include the Supplier feature. Separate supplier-branch implementation and manual test evidence must not be represented as merged or verified on main. |
 | Purchase Receiving / Stock-In | Planned | Define supplier/reference/cost requirements and safe exactly-once stock posting before implementation. Supplier master data does not implement receiving or inventory posting. |
 | Customer Returns | Planned | Define return eligibility, item disposition, inventory effects, and sales reporting. |
 | Delivery Receipt printing | Planned / decision needed | Previously deferred. Confirm layout, numbering, required fields, and reprint behavior with the business. |
 | Audit Logs | Planned | Define critical events, actor data, access, retention, and safe metadata. |
 | Inventory reconciliation / controls | Needs improvement | Confirm every physical stock change has a matching movement and documented reason. |
 
-## Supplier backend scope and verification
+## Supplier work outside the main baseline
 
-Supplier master-data backend is implemented: required supplier name, optional contact details/notes, ACTIVE/INACTIVE status, protected CRUD/status endpoints, validation, and soft-deactivation/reactivation. Manual API verification on the separate `bdms_restore_test` database and the backend TypeScript build passed on 2026-11-09.
+Supplier master-data implementation and manual API verification were recorded on a separate development branch. That work included a Supplier model/migration, validation, CRUD/status endpoints, and soft-deactivation. Manual checks used the separate `bdms_restore_test` database; the backend build was also reported as passing at that time.
 
-The supplier frontend and automated tests remain outstanding. Purchase receiving and inventory/stock posting are separate features and are not part of supplier master data.
+**This work is not present in the reviewed `main` baseline.** Do not describe Suppliers as implemented on main until the relevant branch changes are reviewed, integrated through a pull request, and verified against the resulting main commit. The supplier frontend and automated tests were still outstanding in the recorded implementation notes. Purchase receiving and inventory posting are separate features.
 
-For the detailed implementation record, manual verification scenarios, and known case-insensitive uniqueness race limitation, see [the development log](development-log.md).
-## Current review findings
+The recorded supplier-name pre-check was case-insensitive, while the database unique index was case-sensitive; concurrent differently-cased inserts therefore remained a known race risk. See the [development log](development-log.md).
+## Current main-baseline findings
 
-- Verify authentication and authorization on Customer and Delivery APIs.
-- The Orders backend feature exists, but the prior reviewed frontend route list had no Orders page/route.
-- Review all inventory mutation paths and reconcile inventory balances with stock-movement history.
-- The stock-movement service's ADJUSTMENT semantics should remain documented as setting the counted balance unless the business approves a different rule.
-- Review whole-number quantity enforcement at the database layer; inspected Prisma quantity columns have used Decimal.
-- Delivery completion uses a transaction and corresponding OUT movements; re-test failure and retry paths in a safe database.
+- The Customer, Orders, Deliveries, Sales, Reports, and Dashboard route groups do not apply backend `authenticate` or `authorize` middleware in the reviewed baseline. Frontend route guards and a client-sent bearer token do not secure these API endpoints.
+- The Orders backend exists, but no Orders frontend page/route was found in the reviewed frontend route tree.
+- `PUT /api/inventory/:id` can change an inventory quantity without creating a corresponding Stock Movement.
+- Inventory and Stock Movement quantities are Decimal in Prisma, and the reviewed Zod schemas do not enforce integers.
+- The Stock Movement `ADJUSTMENT` implementation treats the submitted quantity as the replacement balance, not a signed delta.
+- Delivery completion deducts stock, creates `OUT / SALE` movements, and updates Delivery/Order status in one transaction. Failure, retry, and concurrency behavior still need regression testing.
+- The Delivery UI currently supports one product line when creating a delivery, although the backend supports multiple delivery items.
 
 ## Follow-up work
 
 The detailed, prioritized list of technical follow-ups and candidate features is maintained in [the backlog](backlog.md). Keep this status document focused on the current implementation and verification state; do not duplicate the backlog here.
-## Verification record
+## Scope and verification record
 
-For each status change, record what changed, which workflow and scenarios were tested, exact commands and outcomes, what remains untested, and the related commit or pull request. Do not mark a feature verified solely because it compiles.
+The source baseline for this snapshot is `main` commit `f239ed9` (2026-11-17). The findings above come from source inspection and previously recorded, separately scoped manual test evidence; they are not a claim that the entire application was executed or regression-tested on this commit. Local frontend/backend builds, automated tests, full API security tests, and end-to-end regression were not run as part of this documentation audit.
+
+For each future status change, record what changed, the exact branch/commit, workflow and scenarios tested, commands and outcomes, what remains untested, and the related pull request. Do not mark a feature verified solely because it compiles.
