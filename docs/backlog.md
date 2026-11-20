@@ -30,6 +30,8 @@ This is a flexible list of proposed work, technical follow-ups, and unresolved b
 | Delivery Receipt printing | Planned / decision needed | Paper size/layout, numbering, required fields, copies, and historical reprint behavior. |
 | Audit Logs | Planned | Critical events, actor/action details, access restrictions, and retention. |
 | Reports and dashboard improvements | As needs arise | Source-of-truth definitions, date filters, reconciliation, and role-based access. |
+| Payments / Accounts Receivable | Planned | COD and agreed customer credit terms; cash and bank transfer; verification before recording receipt; multiple and partial payments; due dates, overdue status, payment history, and customer balances. Future allocation of one payment across multiple orders is not part of the initial workflow. |
+| Customer Discounts | Planned | Percentage-only discounts manually applied during order processing; optional customer reference discount; permission-controlled application; preserve discount history and report gross, discount, and final amounts. |
 
 ## Longer-term ideas — not commitments
 
