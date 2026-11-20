@@ -113,18 +113,76 @@ Customer records should contain the information needed to identify customers and
 
 ## 6. Payments and outstanding balances
 
-Where customer payments are tracked in BDMS, payment records should be associated with the relevant customer and, where applicable, delivery or sales transaction.
+BDMS should track money actually received from customers and the remaining amount owed for completed customer transactions. Payment arrangements, payment methods, and individual payment records must be represented distinctly.
 
-The business needs to distinguish:
+### 6.1 Payment arrangements and methods
 
-- Total amount charged.
-- Payments received.
-- Remaining balance.
-- Fully paid and partially paid transactions.
+The business may use either of these payment arrangements:
 
-Payment records should preserve payment dates, amounts, and references. The system should not treat an unpaid or partially paid delivery as though payment had been received.
+- **Cash on delivery (COD):** the customer is expected to pay when the goods are delivered.
+- **Credit terms:** the customer is allowed to pay within an agreed period, such as 15 days, 30 days, or another period agreed with the business.
 
-## 7. Expected reports
+Payment arrangements describe when payment is due. They are separate from the method used to pay. The initial supported payment methods are:
+
+- Cash.
+- Bank transfer.
+
+Customer records may contain default payment terms for reference. The actual agreed terms and applicable due date must be recorded with each transaction so that later changes to a customer's default terms do not alter existing transaction history.
+
+### 6.2 Recording payments
+
+Each recorded payment should preserve, at minimum:
+
+- Customer and the order/delivery transaction to which the payment is applied.
+- Amount received.
+- Date received.
+- Payment method.
+- Staff member who recorded the payment.
+- Relevant notes or reference information.
+
+For a bank transfer, record the bank name and the bank transaction/reference number. A reference number alone does not prove that funds were received. Staff must verify that the transfer has actually been received before recording it as a received payment.
+
+### 6.3 Partial and multiple payments
+
+A transaction may be settled through multiple payments. For example, a customer may pay part of an amount by bank transfer, make another transfer later, and pay the remainder in cash.
+
+BDMS should:
+
+- Allow partial payments.
+- Preserve each payment as a separate record, including its date, amount, method, and recorder.
+- Automatically calculate the remaining balance from the transaction's final amount less the payments received.
+- Identify a transaction as unpaid, partially paid, or fully paid.
+- Mark a transaction fully paid only when its remaining balance reaches zero.
+
+An overdue condition is separate from the payment status. A transaction is overdue when its due date has passed and a balance remains outstanding.
+
+### 6.4 Payment allocation scope
+
+For the initial workflow, staff will record each payment against one order/delivery transaction at a time. Multiple payments may be recorded against that same transaction.
+
+The business may later need to apply one payment, such as a single bank transfer, across multiple orders. This is a future capability and is not required in the initial workflow. The design should avoid unnecessarily preventing that extension, but the initial user interface and process should remain focused on one transaction per payment record.
+
+### 6.5 Outstanding balances
+
+Outstanding balances must be based on the final transaction amount after any applicable discount, less all payments actually received and allocated to that transaction.
+
+Completing a delivery confirms that goods were delivered; it does not confirm that the customer paid. Delivery completion must not automatically mark a transaction as paid.
+
+## 7. Customer discounts
+
+BDMS should support percentage-based customer discounts that staff may deliberately apply while processing an order.
+
+- The initial discount type is percentage only.
+- Discounts are applied manually during order processing by staff with the appropriate permission.
+- A customer being regular or having a good payment history must not automatically trigger a discount.
+- A customer record may optionally store a reference discount percentage, but this value is not applied automatically. Staff must choose to apply the discount to a particular order.
+- The system must preserve the original amount, discount percentage, calculated discount amount, and final discounted amount. The original selling amount must not be overwritten.
+- Record which staff member applied the discount and when it was applied.
+- Any payment balance must be calculated from the final discounted amount, not the original amount.
+- Discounts are applied during order pricing, not when a payment is recorded.
+- Discount application must be permission-controlled. Specific discount limits or approval requirements can be defined by the business later.
+
+## 8. Expected reports
 
 The original requirements describe operational reports that help the business review stock, deliveries, and customer accounts. Future BDMS reporting may include:
 
@@ -153,9 +211,15 @@ The original requirements describe operational reports that help the business re
 - Source allocation details for delivered stock, where needed for traceability.
 
 ### Payment reports
-- Payments received over a selected period.
-- Paid and partially paid transactions.
-- Outstanding customer balances.
+- Payments received over a selected period, with payment dates and methods.
+- Paid, partially paid, unpaid, and overdue transactions.
+- Outstanding balances by customer and transaction.
+- Payment history, including multiple and partial payments.
+
+### Discount reports
+- Gross amount, discount amount, and final/net amount for discounted orders.
+- Discount history by customer and order.
+- Discount percentage, amount, and staff member who applied it.
 
 ### Dashboard summaries
 - Current inventory totals.
@@ -166,7 +230,7 @@ The original requirements describe operational reports that help the business re
 
 Reports should support date and relevant supplier, product, or customer filters. Totals should be traceable to the underlying records.
 
-## 8. Important business rules
+## 9. Important business rules
 
 1. Record actual supplier receipts; do not increase inventory merely because a supplier is listed for a product.
 2. Keep supplier, product, receiving, delivery, and payment records distinct.
@@ -180,8 +244,17 @@ Reports should support date and relevant supplier, product, or customer filters.
 10. Any distinction between FY-owned stock, FY-supplied stock held by Falcore, and Falcore-purchased stock should only be tracked if the business confirms that ownership/source affects how stock is recorded, reported, or reconciled.
 11. Supplier/source attribution records where received stock came from; after acceptance into the warehouse, the stock is the business's inventory and must be included in the total warehouse balance.
 12. Delivery allocation follows FIFO by default, with staff permitted to override the source selection. Allocations must not exceed the selected source's available balance and must remain traceable to the delivery.
+13. Completing a delivery does not mean payment has been received; delivery and payment records must remain distinct.
+14. Payment arrangement (COD or agreed credit terms) is separate from payment method (initially cash or bank transfer).
+15. Record a payment as received only after the business has verified that the funds were actually received.
+16. Preserve each partial or multiple payment as a separate record. Calculate the remaining balance from the final transaction amount less payments received.
+17. A transaction is overdue only when its due date has passed and a balance remains outstanding.
+18. Changes to a customer's default payment terms must not retroactively change the terms or due date recorded for an existing transaction.
+19. Discounts are percentage-based and manually applied by authorized staff during order processing; a regular-customer relationship alone must not apply a discount automatically.
+20. Preserve the original amount, discount percentage, discount amount, final discounted amount, and the staff member/time associated with applying the discount.
+21. Calculate payment balances using the final discounted transaction amount.
 
-## 9. Scope and implementation note
+## 10. Scope and implementation note
 
 This document captures the business workflow and reporting needs as a reference for BDMS. It does not require a separate Excel system, a particular worksheet layout, or immediate implementation of every report.
 
