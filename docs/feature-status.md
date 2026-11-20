@@ -2,7 +2,7 @@
 
 **Repository:** `Mercurial999/BDMS`
 **Source baseline:** `main` at commit `f239ed9`
-**Status updated:** 2026-11-19
+**Status updated:** 2026-11-21
 
 > This is an evidence-based snapshot of the reviewed `main` baseline, not a live dashboard. It does not include unmerged work from feature branches or local working trees. Verification statements distinguish source inspection, manual checks, builds, automated tests, and end-to-end testing.
 
@@ -41,6 +41,18 @@ BDMS uses ongoing feature-based development. Work is selected by business priori
 | Delivery Receipt printing | Planned / decision needed | Previously deferred. Confirm layout, numbering, required fields, and reprint behavior with the business. |
 | Audit Logs | Planned | Define critical events, actor data, access, retention, and safe metadata. |
 | Inventory reconciliation / controls | Needs improvement | Confirm every physical stock change has a matching movement and documented reason. |
+
+## Backend route security work outside the main baseline
+
+Backend authentication and authorization changes are implemented on `feature/route-security` at code commit `60fc111` (2026-11-20). This work is **not yet part of the reviewed `main` baseline** and remains subject to pull-request review and integration.
+
+- Applied `authenticate` and least-privilege `authorize` middleware to every route in the Customers, Orders, Deliveries, Sales, Reports, and Dashboard route groups.
+- Added the missing `orders.read/create/update/delete` and `dashboard.read` permission seed entries. The existing idempotent seed process assigned permissions to Administrator; the seed completed successfully against the development database.
+- Backend `npm run build` passed. The Docker backend image was rebuilt and the container restarted.
+- Representative runtime checks: unauthenticated GET requests returned 401 for all six route groups; Warehouse Staff requests returned 403 for all six groups; Administrator requests returned 200 for Dashboard and Customers.
+- These are representative route-group checks, not a claim that every individual endpoint was manually exercised. No automated authorization test suite or full end-to-end regression run has been completed.
+
+After integration, update the main-baseline snapshot and run the agreed broader regression/automated checks against the merged commit.
 
 ## Supplier work outside the main baseline
 
