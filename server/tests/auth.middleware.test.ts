@@ -132,6 +132,20 @@ describe("Authentication middleware", () => {
     );
   });
 
+  it("returns 401 when the authorization header contains extra parts", async () => {
+    const token = createToken();
+
+    const response = await request(app)
+      .get("/protected")
+      .set("Authorization", `Bearer ${token} extra`);
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe(
+      "Invalid authentication format."
+    );
+    expect(mockFindById).not.toHaveBeenCalled();
+  });
+
   it("returns 401 for an invalid token", async () => {
     const response = await request(app)
       .get("/protected")
