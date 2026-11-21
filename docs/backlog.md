@@ -6,7 +6,7 @@ This is a flexible list of proposed work, technical follow-ups, and unresolved b
 
 | Priority | Item | Reason / acceptance direction |
 |---|---|---|
-| Critical | Backend API authentication and authorization | Add and verify authentication plus least-privilege permissions for Customer, Orders, Deliveries, Sales, Reports, and Dashboard routes. Test unauthenticated (401), authenticated-but-forbidden (403), and authorized requests for every endpoint. Do not rely on frontend route guards. |
+| Critical — integration pending | Backend API authentication and authorization | Implemented on `feature/route-security`; route-level authentication and least-privilege permissions now cover Customers, Orders, Deliveries, Sales, Reports, and Dashboard. Representative 401/403/200 runtime checks and a backend build passed on this branch. Review and integrate through a pull request; retain endpoint-level middleware coverage and expand automated authorization tests. Do not rely on frontend route guards. |
 | High | Remove or constrain direct inventory quantity updates | Ensure ordinary stock changes cannot bypass the Stock Movement ledger. Define a safe adjustment/count workflow and preserve atomic balance-to-ledger updates. |
 | High | Enforce whole-number stock quantities | Align Inventory and Stock Movement API validation and database constraints with the confirmed whole-number business rule; inspect existing data and migration impact first. |
 | High | Clarify ADJUSTMENT semantics | The reviewed implementation sets an absolute counted balance, not a delta. Confirm the intended user input and audit behavior before changing the API contract. |

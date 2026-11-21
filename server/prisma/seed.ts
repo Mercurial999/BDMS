@@ -129,6 +129,24 @@ const permissions = [
     description: "Delete customers",
   },
 
+  // Orders
+  {
+    name: "orders.read",
+    description: "View orders",
+  },
+  {
+    name: "orders.create",
+    description: "Create orders",
+  },
+  {
+    name: "orders.update",
+    description: "Update orders",
+  },
+  {
+    name: "orders.delete",
+    description: "Delete order items",
+  },
+
   // Deliveries
   {
     name: "deliveries.read",
@@ -174,6 +192,12 @@ const permissions = [
     name: "reports.export",
     description: "Export reports",
   },
+
+  // Dashboard
+  {
+    name: "dashboard.read",
+    description: "View dashboard",
+  },
 ];
 
 
@@ -215,7 +239,7 @@ async function main() {
 
     if (!permissionRecord) {
       throw new Error(
-        `Permission ${permission.name} not found.`
+        "Permission " + permission.name + " not found."
       );
     }
 

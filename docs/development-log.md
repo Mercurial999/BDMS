@@ -1,5 +1,14 @@
 # BDMS Development Log
 
+## 2026-11-21 — Secure backend business routes
+
+- **Feature / area:** Backend authentication and authorization for Customers, Orders, Deliveries, Sales, Reports, and Dashboard.
+- **Change:** Added route-level `authenticate` middleware followed by least-privilege `authorize` checks across the route groups. Added the missing `orders.read/create/update/delete` and `dashboard.read` permission seed entries; retained the existing idempotent seed/upsert pattern.
+- **Business decision:** Customers use `customers.read/create/update/delete`; Orders use `orders.read/create/update/delete`; Deliveries use `deliveries.read/create/update` (there is no delivery-delete endpoint); Sales use `sales.read`; Reports use `reports.read`; Dashboard uses `dashboard.read`.
+- **Verification:** Local backend `npm run build` passed. The permission seed completed successfully against `bdms_db`. The Docker backend image was rebuilt. Representative unauthenticated GET requests returned 401 for each of the six route groups. Warehouse Staff requests returned 403 for Customers, Orders, Deliveries, Sales, Reports, and Dashboard. Administrator requests returned 200 for Dashboard and Customers. These checks do not mean every individual endpoint was manually exercised. No automated authorization suite or full end-to-end regression was run.
+- **Remaining work:** Review and integrate the branch through a pull request; add automated authorization tests and perform broader regression verification after integration.
+- **Commit / branch:** `feature/route-security`; implementation/build/runtime verification recorded at code commit `60fc111`. Documentation updates are being committed separately on the same branch.
+
 ## 2026-11-19 — Audit documentation against main
 
 - **Scope:** Reviewed the documentation branch against `main` commit `f239ed9`; no application source or database files were changed.

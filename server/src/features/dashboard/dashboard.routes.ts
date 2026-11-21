@@ -7,78 +7,81 @@ import {
   dashboardDeliveriesQuerySchema,
 } from "./dashboard.validation.js";
 
+import { authenticate } from "../../middleware/auth.middleware.js";
+import { authorize } from "../../middleware/permission.middleware.js";
+
 const router = Router();
 
 router.get(
   "/sales",
-  dashboardController.getSalesSummary.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getSalesSummary.bind(dashboardController),
 );
 
 router.get(
   "/deliveries",
-  dashboardController.getDeliverySummary.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getDeliverySummary.bind(dashboardController),
 );
 
 router.get(
   "/deliveries/list",
+  authenticate,
+  authorize("dashboard.read"),
   validateQuery(dashboardDeliveriesQuerySchema),
-  dashboardController.getDeliveries.bind(
-    dashboardController,
-  ),
-)
+  dashboardController.getDeliveries.bind(dashboardController),
+);
 
 router.get(
   "/inventory",
-  dashboardController.getInventorySummary.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getInventorySummary.bind(dashboardController),
 );
 
 router.get(
   "/top-selling",
-  dashboardController.getTopSellingProducts.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getTopSellingProducts.bind(dashboardController),
 );
 
 router.get(
   "/in-demand",
-  dashboardController.getProductsInDemand.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getProductsInDemand.bind(dashboardController),
 );
 
 router.get(
   "/recent-orders",
-  dashboardController.getRecentOrders.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getRecentOrders.bind(dashboardController),
 );
 
 router.get(
   "/orders",
+  authenticate,
+  authorize("dashboard.read"),
   validateQuery(dashboardOrdersQuerySchema),
-  dashboardController.getOrders.bind(
-    dashboardController,
-  ),
+  dashboardController.getOrders.bind(dashboardController),
 );
 
 router.get(
   "/recent-deliveries",
-  dashboardController.getRecentDeliveries.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getRecentDeliveries.bind(dashboardController),
 );
 
 router.get(
   "/summary",
-  dashboardController.getSummary.bind(
-    dashboardController,
-  ),
+  authenticate,
+  authorize("dashboard.read"),
+  dashboardController.getSummary.bind(dashboardController),
 );
 
 export default router;
