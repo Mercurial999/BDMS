@@ -20,14 +20,20 @@ export async function authenticate(
       );
     }
 
-    const [scheme, token] = authorization.split(" ");
+    const authorizationParts = authorization.trim().split(/\s+/);
 
-    if (scheme !== "Bearer" || !token) {
+    if (
+      authorizationParts.length !== 2 ||
+      authorizationParts[0] !== "Bearer" ||
+      !authorizationParts[1]
+    ) {
       throw new AppError(
         "Invalid authentication format.",
         401
       );
     }
+
+    const token = authorizationParts[1];
 
     let payload: string | jwt.JwtPayload;
 
