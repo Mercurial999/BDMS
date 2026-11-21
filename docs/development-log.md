@@ -1,13 +1,20 @@
 # BDMS Development Log
 
+## 2026-11-21 — Update route-security documentation after PR #3 merge
+
+- **Scope:** Updated the backlog, feature-status snapshot, and development log to reflect the route-security integration into `main`.
+- **Changes:** Marked backend route authentication and authorization as integrated through PR #3; retained automated authorization tests and broader endpoint-level regression as outstanding work. Updated the feature-status source baseline to merge commit `e2264b5`. Supplier status and implementation notes were left unchanged.
+- **Verification:** Compared the documentation against the merged `main` source and PR #3 merge details. This is a documentation-only change; no application code, database, migration, or configuration was changed. No build, lint, automated test, or end-to-end regression was run for this documentation update.
+- **Branch:** `docs/post-merge-route-security-status`; submitted for review in PR #4.
+
 ## 2026-11-21 — Secure backend business routes
 
 - **Feature / area:** Backend authentication and authorization for Customers, Orders, Deliveries, Sales, Reports, and Dashboard.
 - **Change:** Added route-level `authenticate` middleware followed by least-privilege `authorize` checks across the route groups. Added the missing `orders.read/create/update/delete` and `dashboard.read` permission seed entries; retained the existing idempotent seed/upsert pattern.
 - **Business decision:** Customers use `customers.read/create/update/delete`; Orders use `orders.read/create/update/delete`; Deliveries use `deliveries.read/create/update` (there is no delivery-delete endpoint); Sales use `sales.read`; Reports use `reports.read`; Dashboard uses `dashboard.read`.
 - **Verification:** Local backend `npm run build` passed. The permission seed completed successfully against `bdms_db`. The Docker backend image was rebuilt. Representative unauthenticated GET requests returned 401 for each of the six route groups. Warehouse Staff requests returned 403 for Customers, Orders, Deliveries, Sales, Reports, and Dashboard. Administrator requests returned 200 for Dashboard and Customers. These checks do not mean every individual endpoint was manually exercised. No automated authorization suite or full end-to-end regression was run.
-- **Remaining work:** Review and integrate the branch through a pull request; add automated authorization tests and perform broader regression verification after integration.
-- **Commit / branch:** `feature/route-security`; implementation/build/runtime verification recorded at code commit `60fc111`. Documentation updates are being committed separately on the same branch.
+- **Remaining work:** Add automated authorization tests and perform broader endpoint-level regression against the merged `main` baseline. Representative route-group checks do not establish that every endpoint has been exercised.
+- **Integration:** Merged through PR #3 by squash into `main` at `e2264b54c435c7a43d9dc83f693293e913d151ba` on 2026-11-21. Implementation/build/runtime verification was recorded on `feature/route-security` at code commit `60fc111`.
 
 ## 2026-11-19 — Audit documentation against main
 
